@@ -9,3 +9,9 @@ libraryDependencies ++= Seq(
 )     
 
 play.Project.playJavaSettings
+
+// The file containing the require.js bootstrap for the app.
+requireJs += "main.js"
+
+// The file containiner the require.js config for the app.
+requireJsShim += "main.js"
