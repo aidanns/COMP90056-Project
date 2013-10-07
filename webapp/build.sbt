@@ -1,11 +1,13 @@
-name := "webapp"
+name := "cdr-webapp"
 
 version := "1.0-SNAPSHOT"
 
+// "com.aidanns.streams.project" % "cdr-model" % "1.0-SNAPSHOT"
 libraryDependencies ++= Seq(
   javaJdbc,
-  javaEbean,
-  cache
+  cache,
+  javaJpa,
+  "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final"
 )     
 
 play.Project.playJavaSettings
@@ -15,3 +17,6 @@ requireJs += "main.js"
 
 // The file containiner the require.js config for the app.
 requireJsShim += "main.js"
+
+// Add the local maven repo.
+resolvers += "Local Maven Repo" at "file://" + Path.userHome.absolutePath + "/.m2/repository"
