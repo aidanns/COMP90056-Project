@@ -6,16 +6,13 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Define which virtual machine to use as a base for this one.
-  config.vm.box = "raring64"
-  config.vm.box_url = "http://files.vagrantup.com/raring64.box"
-
-  # Don't automatically install the virtualbox extensions.
-  config.vbguest.auto_update = true
+  config.vm.box = "ubuntu-raring-server-amd64_13.04"
+  config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box"
 
   # Create the shell script used to create the system in pkg_cmd.
 
   # Install extra drivers to get AUFS support.
-  pkg_cmd = "apt-get update; apt-get install linux-image-extra-`uname -r`; "
+  pkg_cmd = "apt-get update; apt-get install -y linux-image-extra-`uname -r`; "
 
   # Add docker repo.
   pkg_cmd << "wget -q -O - https://get.docker.io/gpg | apt-key add -; "
@@ -23,6 +20,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   # Install docker.
   pkg_cmd << "apt-get update; apt-get install -y lxc-docker; "
+
+  # Configure docker so it can be used by the vagrant user.
+  pkg_cmd << "gpasswd -a vagrant docker; "
+  pkg_cmd << "service docker restart; "
+  pkg_cmd << "reboot; "
 
   config.vm.provision :shell, :inline => pkg_cmd
 
