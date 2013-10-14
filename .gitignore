@@ -5,3 +5,6 @@ eclipse_workspace
 cdr_related_work.pdf
 cdr_spec.pdf
 gsm_spec.pdf
+
+# Vagrant VM
+.vagrant
