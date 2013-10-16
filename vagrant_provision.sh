@@ -28,8 +28,14 @@ rm play-2.2.0.zip
 chown -R root:staff /usr/local/share/play-2.2.0
 chmod -R 775 /usr/local/share/play-2.2.0
 
+# Install Maven
+apt-get install -y maven3
+
 # Install some basic useful stuff.
 apt-get install -y vim man
 
 # Run the application
-# cd /vagrant/webapp && /usr/local/share/play-2.2.0/play start 8000
+# cd /vagrant/webapp && /usr/local/share/play-2.2.0/play start 8000 &
+
+# Run the stream app
+# cd /vagrant/streamapp && mvn compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=com.aidanns.streams.project.Project &
