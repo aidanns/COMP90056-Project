@@ -11,8 +11,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create the shell script used to create the system in pkg_cmd.
 
+  # Install the deb proxy client to autodiscover local deb proxies.
+  # Install the english language pack to stop the warning.
+  pkg_cmd = "apt-get update; apt-get install -y squid-deb-proxy-client language-pack-en; "
+
   # Install extra drivers to get AUFS support.
-  pkg_cmd = "apt-get update; apt-get install -y linux-image-extra-`uname -r`; "
+  pkg_cmd << "apt-get install -y linux-image-extra-`uname -r`; "
 
   # Add docker repo.
   pkg_cmd << "wget -q -O - https://get.docker.io/gpg | apt-key add -; "
@@ -24,9 +28,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure docker so it can be used by the vagrant user.
   pkg_cmd << "gpasswd -a vagrant docker; "
   pkg_cmd << "service docker restart; "
-  pkg_cmd << "reboot; "
 
   config.vm.provision :shell, :inline => pkg_cmd
+  config.vm.provision :reload
 
   # Create a host-only network to the vagrant instance.
   config.vm.network :private_network, ip: "192.168.33.10"
