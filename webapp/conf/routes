@@ -5,6 +5,13 @@
 # Home page
 GET     /                           controllers.Application.index()
 
+# REST
+GET		/api/rule					controllers.Rule.index
+POST	/api/rule					controllers.Rule.create
+GET		/api/rule/:id				controllers.Rule.read(id: Long)
+PUT		/api/rule/:id				controllers.Rule.update(id: Long)
+DELETE	/api/rule/:id				controllers.Rule.delete(id: Long)
+
 # DB Test Operations
 GET		/create/one					controllers.Debugging.addRuleOne()
 GET		/create/two					controllers.Debugging.addRuleTwo()
