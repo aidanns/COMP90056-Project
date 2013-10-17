@@ -2,9 +2,7 @@ package controllers;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -41,7 +39,7 @@ public class Rule extends Controller {
 		if (rule == null) {
 			return notFound();
 		} else {
-			return ok(ruleToJson(rule));
+			return ok(rule.toJson());
 		}
 	}
 	
@@ -77,24 +75,8 @@ public class Rule extends Controller {
 	private static ArrayNode ruleListToJson(List<models.Rule> rules) {
 		ArrayNode arrayNode = Json.newObject().arrayNode();
 		for(models.Rule r : rules) {
-			arrayNode.add(ruleToJson(r));
+			arrayNode.add(r.toJson());
 		}
 		return arrayNode;
-	}
-	
-	/**
-	 * Convert an individual Rule to JSON.
-	 * @param rule The Rule to convert.
-	 * @return A JSON representation of the rule.
-	 */
-	private static JsonNode ruleToJson(models.Rule rule) {
-		ObjectNode object = Json.newObject();
-		object.put("id", rule.id);
-		object.put("name", rule.name);
-		object.put("active", rule.active);
-		object.put("windowSize", rule.windowSize);
-		object.put("numberOfConstraintMatches", rule.numberOfConstraintMatches);
-		// TODO: Add the constraint.
-		return object;
 	}
 }

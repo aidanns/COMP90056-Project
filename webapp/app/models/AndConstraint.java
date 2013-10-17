@@ -6,6 +6,10 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import play.libs.Json;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 /**
  * A constraint that evaluates to true if it's two children both evaluate to true.
  * @author Aidan Nagorcka-Smith (aidanns@gmail.com)
@@ -35,6 +39,19 @@ public class AndConstraint extends Constraint {
 	public AndConstraint(Constraint firstChild, Constraint secondChild) {
 		this.firstChild = firstChild;
 		this.secondChild = secondChild;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see models.Constraint#toJson()
+	 */
+	@Override
+	public ObjectNode toJson() {
+		ObjectNode object = Json.newObject();
+		object.put("type", "and");
+		object.put("firstChild", firstChild.toJson());
+		object.put("secondChild", secondChild.toJson());
+		return object;
 	}
 	
 }

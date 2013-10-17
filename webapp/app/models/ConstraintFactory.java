@@ -61,7 +61,7 @@ public class ConstraintFactory {
 	 * @return A constraint that will match CDRs with the given CDRType.
 	 */
 	public static ConstraintBuilder makeCDRTypeConstraint(CallDataRecord.CDRType type) {
-		return new ConstraintBuilder(new CDRTypeEqualityConstraint(type));
+		return new ConstraintBuilder(new StringEqualityConstraint(CallDataRecord.Field.CDRType, type.toString()));
 	}
 	
 	/**

@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 /**
  * Representation of a constraint that can be used to match certain CDRs.
  * If the constraint evaluated to true for a given CDR, it is said to match.
@@ -20,5 +22,11 @@ public abstract class Constraint {
 	@Id
 	@GeneratedValue
 	public Long id;
+	
+	/**
+	 * Get a JSON representation of this constraint.
+	 * @return JSON representing this constraint.
+	 */
+	public abstract ObjectNode toJson();
 	
 }

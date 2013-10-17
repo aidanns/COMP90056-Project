@@ -9,6 +9,10 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import play.libs.Json;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 /**
  * Represents a Rule that may match a given CDR.
  * 
@@ -45,5 +49,20 @@ public class Rule {
 	/** Number of times the constraint has to match in a single window for the rule to match. */
 	@Basic 
 	public Integer numberOfConstraintMatches;
+	
+	/**
+	 * Get a JSON representation of this Rule.
+	 * @return A JSON representation of this rule.
+	 */
+	public ObjectNode toJson() {
+		ObjectNode object = Json.newObject();
+		object.put("id", id);
+		object.put("name", name);
+		object.put("active", active);
+		object.put("windowSize", windowSize);
+		object.put("numberOfConstraintMatches", numberOfConstraintMatches);
+		object.put("constraint", constraint.toJson());
+		return object;
+	}
 	
 }
