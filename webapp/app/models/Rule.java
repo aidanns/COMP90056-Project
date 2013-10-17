@@ -11,6 +11,10 @@ import org.hibernate.annotations.CascadeType;
 
 /**
  * Represents a Rule that may match a given CDR.
+ * 
+ * Rules are said to match if their constraint matches a certain number of
+ * CDRs within a certain window of time.
+ * 
  * @author Aidan Nagorcka-Smith (aidanns@gmail.com)
  */
 @Entity
@@ -33,5 +37,13 @@ public class Rule {
 	@OneToOne
 	@Cascade({CascadeType.ALL})
 	public Constraint constraint;
+	
+	/** Number of seconds to use as the window size for this rule. */
+	@Basic
+	public Integer windowSize;
+	
+	/** Number of times the constraint has to match in a single window for the rule to match. */
+	@Basic 
+	public Integer numberOfConstraintMatches;
 	
 }
