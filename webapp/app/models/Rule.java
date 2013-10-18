@@ -9,7 +9,6 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import play.api.Logger;
 import play.libs.Json;
 
 import com.fasterxml.jackson.databind.JsonNode;

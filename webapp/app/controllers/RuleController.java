@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+import models.Rule;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
@@ -35,9 +37,11 @@ public class RuleController extends Controller {
 		if (rule == null) {
 			return badRequest("JSON was not a valid rule.");
 		}
-		// TODO: Return a HTTP error if the rule already exists.
+		if (rule.id != null) {
+			return badRequest("You may not specify an Id for a new rule.");
+		}
 		JPA.em().persist(rule);
-		return ok();
+		return ok(rule.toJson());
 	}
 
 	/**
@@ -64,13 +68,24 @@ public class RuleController extends Controller {
 		if (json == null) {
 			return badRequest("Expected a JSON representation of a rule.");
 		}
-		models.Rule rule = models.Rule.fromJson(json);
-		if (rule == null) {
+		models.Rule postedRule = models.Rule.fromJson(json);
+		if (postedRule == null) {
 			return badRequest("JSON was not a valid rule.");
 		}
-		// TODO: Return a HTTP error if the rule does not already exists.
+		
+		final Rule rule = JPA.em().find(models.Rule.class, id);
+		if (rule == null) {
+			return badRequest("No rule exists with id " + id);
+		}
+		
+		rule.name = postedRule.name;
+		rule.active = postedRule.active;
+		rule.constraint = postedRule.constraint;
+		rule.windowSize = postedRule.windowSize;
+		rule.numberOfConstraintMatches = postedRule.numberOfConstraintMatches;
+		
 		JPA.em().persist(rule);
-		return ok();
+		return ok(rule.toJson());
 	}
 
 	/**
