@@ -6,17 +6,17 @@
 GET     /                           controllers.Application.index()
 
 # REST
-GET		/api/rule					controllers.Rule.index
-POST	/api/rule					controllers.Rule.create
-GET		/api/rule/:id				controllers.Rule.read(id: Long)
-PUT		/api/rule/:id				controllers.Rule.update(id: Long)
-DELETE	/api/rule/:id				controllers.Rule.delete(id: Long)
+GET		/api/rule					controllers.RuleController.index
+POST	/api/rule					controllers.RuleController.create
+GET		/api/rule/:id				controllers.RuleController.read(id: Long)
+PUT		/api/rule/:id				controllers.RuleController.update(id: Long)
+DELETE	/api/rule/:id				controllers.RuleController.delete(id: Long)
 
 # DB Test Operations
-GET		/create/one					controllers.Debugging.addRuleOne()
-GET		/create/two					controllers.Debugging.addRuleTwo()
-GET		/show/constraint			controllers.Debugging.showAllConstraints()
-GET		/show/rule					controllers.Debugging.showAllRules()
+GET		/create/one					controllers.DebuggingController.addRuleOne()
+GET		/create/two					controllers.DebuggingController.addRuleTwo()
+GET		/show/constraint			controllers.DebuggingController.showAllConstraints()
+GET		/show/rule					controllers.DebuggingController.showAllRules()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

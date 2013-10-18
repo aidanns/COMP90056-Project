@@ -9,8 +9,10 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import play.api.Logger;
 import play.libs.Json;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -63,6 +65,32 @@ public class Rule {
 		object.put("numberOfConstraintMatches", numberOfConstraintMatches);
 		object.put("constraint", constraint.toJson());
 		return object;
+	}
+	
+	/**
+	 * Get a rule from some JSON.
+	 * @param jsonObject The JSON to parse.
+	 * @return The Rule.
+	 */
+	public static Rule fromJson(JsonNode jsonObject) {
+		Rule r = new Rule();
+		r.id = jsonObject.get("id") == null ? null : jsonObject.get("id").asLong();
+		r.name = jsonObject.get("name") == null ? null : jsonObject.get("name").asText();
+		r.active = jsonObject.get("active") == null ? null : jsonObject.get("active").asBoolean();
+		r.windowSize = jsonObject.get("windowSize") == null ? null : jsonObject.get("windowSize").asInt();
+		r.numberOfConstraintMatches = jsonObject.get("numberOfConstraintMatches") == null ? null : jsonObject.get("numberOfConstraintMatches").asInt();
+		r.constraint = jsonObject.get("constraint") == null ? null : ConstraintFactory.fromJson(jsonObject.get("constraint")).get();
+		if (!r.validate()) {
+			return null;
+		}
+		return r;
+	}
+	
+	public boolean validate() {
+		// Id may be null in the case where the rule is not yet saved, but all other variables must
+		// be set for the rule to be valid.
+		return name != null && active != null && windowSize != null 
+				&& numberOfConstraintMatches != null && constraint != null;
 	}
 	
 }

@@ -1,5 +1,8 @@
 package models;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Representation of a GSM Call Data Record.
  * @author Aidan Nagorcka-Smith (aidanns@gmail.com)
@@ -25,6 +28,26 @@ public class CallDataRecord {
 		CauseForTermination,
 		BasicService,
 		MSCAddress;
+		
+		// Map from the title of the field to the Field itself.
+		private static Map<String, Field> _stringToFieldMap = new HashMap<String, Field>();
+		
+		static {
+			// Populate a map from field title to Field.
+			for (Field f : Field.values()) {
+				_stringToFieldMap.put(f.toString(), f);
+			}
+		}
+		
+		/**
+		 * Retrieve the field for a given title.
+		 * @param s The title of the field.
+		 * @return The Field itself.
+		 */
+		public static Field fromString(String s) {
+			return _stringToFieldMap.get(s);
+		}
+		
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 /**
  * Factory class for all types of Constraints.
  * @author Aidan Nagorcka-Smith (aidanns@gmail.com)
@@ -80,6 +82,50 @@ public class ConstraintFactory {
 	 */
 	public static ConstraintBuilder makeIMEIConstraint(String IMEI) {
 		return new ConstraintBuilder(new StringEqualityConstraint(CallDataRecord.Field.IMEI, IMEI));
+	}
+	
+	/**
+	 * Parse some JSON and extract a constraint tree. Returns null if the parse is not successful.
+	 * @param jsonObject The JSON object containing the constraint tree.
+	 * @return The parsed constraint tree.
+	 */
+	public static ConstraintBuilder fromJson(JsonNode jsonObject) {
+		if (jsonObject == null) {
+			return null;
+		}
+		// Try and get the type of the constraint, return null if it's not set.
+		String type = jsonObject.get("type") == null ? null : jsonObject.get("type").asText();
+		if (type == null) {
+			return null;
+		}
+		ConstraintBuilder childOne;
+		ConstraintBuilder childTwo;
+		// Return null if we can't find the needed children for a particular type of node.
+		switch (type) {
+		case "and":
+			childOne = fromJson(jsonObject.get("firstChild"));
+			childTwo = fromJson(jsonObject.get("secondChild"));
+			if (childOne == null || childTwo == null) {
+				return null;
+			}
+			return childOne.and(childTwo);
+		case "or":
+			childOne = fromJson(jsonObject.get("firstChild"));
+			childTwo = fromJson(jsonObject.get("secondChild"));
+			if (childOne == null || childTwo == null) {
+				return null;
+			}
+			return childOne.or(childTwo);
+		case "stringEquality":
+			String fieldName = jsonObject.get("field") == null ? null : jsonObject.get("field").asText();
+			String value = jsonObject.get("value") == null ? null : jsonObject.get("value").asText();
+			if (fieldName == null || value == null) {
+				return null;
+			}
+			return new ConstraintBuilder(new StringEqualityConstraint(CallDataRecord.Field.fromString(fieldName), value));
+		}
+		// If we don't recognise the type of the constraint, return null.
+		return null;
 	}
 
 }

@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import play.db.jpa.JPA;
@@ -10,7 +11,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class Rule extends Controller {
+public class RuleController extends Controller {
 
 	/**
 	 * Show all the Rules as JSON.
@@ -26,6 +27,16 @@ public class Rule extends Controller {
 	 */
 	@Transactional
 	public static Result create() {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			return badRequest("Expected JSON to be posted.");
+		}
+		models.Rule rule = models.Rule.fromJson(json);
+		if (rule == null) {
+			return badRequest("JSON was not a valid rule.");
+		}
+		// TODO: Return a HTTP error if the rule already exists.
+		JPA.em().persist(rule);
 		return ok();
 	}
 
@@ -49,6 +60,16 @@ public class Rule extends Controller {
 	 */
 	@Transactional
 	public static Result update(Long id) {
+		JsonNode json = request().body().asJson();
+		if (json == null) {
+			return badRequest("Expected a JSON representation of a rule.");
+		}
+		models.Rule rule = models.Rule.fromJson(json);
+		if (rule == null) {
+			return badRequest("JSON was not a valid rule.");
+		}
+		// TODO: Return a HTTP error if the rule does not already exists.
+		JPA.em().persist(rule);
 		return ok();
 	}
 
