@@ -91,4 +91,69 @@ public class Rule {
 				&& numberOfConstraintMatches != null && constraint != null;
 	}
 	
+	@Override
+	public String toString() {
+		return toJson().toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((active == null) ? 0 : active.hashCode());
+		result = prime * result
+				+ ((constraint == null) ? 0 : constraint.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime
+				* result
+				+ ((numberOfConstraintMatches == null) ? 0
+						: numberOfConstraintMatches.hashCode());
+		result = prime * result
+				+ ((windowSize == null) ? 0 : windowSize.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Rule other = (Rule) obj;
+		if (active == null) {
+			if (other.active != null)
+				return false;
+		} else if (!active.equals(other.active))
+			return false;
+		if (constraint == null) {
+			if (other.constraint != null)
+				return false;
+		} else if (!constraint.equals(other.constraint))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (numberOfConstraintMatches == null) {
+			if (other.numberOfConstraintMatches != null)
+				return false;
+		} else if (!numberOfConstraintMatches
+				.equals(other.numberOfConstraintMatches))
+			return false;
+		if (windowSize == null) {
+			if (other.windowSize != null)
+				return false;
+		} else if (!windowSize.equals(other.windowSize))
+			return false;
+		return true;
+	}
 }

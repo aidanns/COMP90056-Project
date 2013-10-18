@@ -51,4 +51,36 @@ public class OrConstraint extends Constraint {
 		return object;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((firstChild == null) ? 0 : firstChild.hashCode());
+		result = prime * result
+				+ ((secondChild == null) ? 0 : secondChild.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OrConstraint other = (OrConstraint) obj;
+		if (firstChild == null) {
+			if (other.firstChild != null)
+				return false;
+		} else if (!firstChild.equals(other.firstChild))
+			return false;
+		if (secondChild == null) {
+			if (other.secondChild != null)
+				return false;
+		} else if (!secondChild.equals(other.secondChild))
+			return false;
+		return true;
+	}
 }

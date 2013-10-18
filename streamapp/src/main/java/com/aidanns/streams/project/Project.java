@@ -20,8 +20,12 @@ public class Project {
 		TopologyBuilder builder = new TopologyBuilder();
 		
 		// Setup the spouts.
+		builder.setSpout("rule-spout", new RuleSpout(), 1);
 		
 		// Setup the bolts
+		builder.setBolt("rule-change-printer", new RuleChangePrinterBolt(), 1)
+				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
+				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream");
 		
 		// Start the job.
 		Config conf = new Config();
@@ -31,7 +35,7 @@ public class Project {
 		cluster.submitTopology("project", conf, builder.createTopology());
 		
 		try {
-			Thread.sleep(1000 * 10); // Run for half a minute.
+			Thread.sleep(300 * 1000); // Set the runtime for the app in ms.
 		} catch (InterruptedException e) {
 			Logger.getLogger(Project.class).error("Interrupted while"
 					+ " waiting for local cluster to complete processing.");
