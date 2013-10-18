@@ -1,4 +1,4 @@
-package models;
+package com.aidanns.streams.project.models;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -6,8 +6,7 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import play.libs.Json;
-
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -45,7 +44,7 @@ public class OrConstraint extends Constraint {
 	 */
 	@Override
 	public ObjectNode toJson() {
-		ObjectNode object = Json.newObject();
+		ObjectNode object = JsonNodeFactory.instance.objectNode();
 		object.put("type", "or");
 		object.put("firstChild", firstChild.toJson());
 		object.put("secondChild", secondChild.toJson());

@@ -1,10 +1,9 @@
-package models;
+package com.aidanns.streams.project.models;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 
-import play.libs.Json;
-
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -35,7 +34,7 @@ public class StringEqualityConstraint extends BaseComparisonConstraint {
 	 */
 	@Override
 	public ObjectNode toJson() {
-		ObjectNode object = Json.newObject();
+		ObjectNode object = JsonNodeFactory.instance.objectNode();
 		object.put("type", "stringEquality");
 		object.put("field", field.toString());
 		object.put("value", value);

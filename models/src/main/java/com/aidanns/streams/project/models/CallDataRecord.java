@@ -1,4 +1,4 @@
-package models;
+package com.aidanns.streams.project.models;
 
 import java.util.HashMap;
 import java.util.Map;

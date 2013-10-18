@@ -1,4 +1,4 @@
-package models;
+package com.aidanns.streams.project.models;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -9,9 +9,8 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import play.libs.Json;
-
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
@@ -56,7 +55,7 @@ public class Rule {
 	 * @return A JSON representation of this rule.
 	 */
 	public ObjectNode toJson() {
-		ObjectNode object = Json.newObject();
+		ObjectNode object = JsonNodeFactory.instance.objectNode();
 		object.put("id", id);
 		object.put("name", name);
 		object.put("active", active);

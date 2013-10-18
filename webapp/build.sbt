@@ -2,12 +2,12 @@ name := "cdr-webapp"
 
 version := "1.0-SNAPSHOT"
 
-// "com.aidanns.streams.project" % "cdr-model" % "1.0-SNAPSHOT"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaJpa,
-  "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final"
+  "org.hibernate" % "hibernate-entitymanager" % "4.2.6.Final",
+  "com.aidanns.streams.project" % "cdr-models" % "1.0-SNAPSHOT"
 )     
 
 play.Project.playJavaSettings

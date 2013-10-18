@@ -16,3 +16,4 @@ dist
 .cache
 .target
 /data
+get_latest_models.sh

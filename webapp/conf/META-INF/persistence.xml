@@ -6,10 +6,17 @@
     <persistence-unit name="defaultPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <non-jta-data-source>DefaultDS</non-jta-data-source>
+        <class>com.aidanns.streams.project.models.Rule</class>
+        <class>com.aidanns.streams.project.models.Constraint</class>
+        <class>com.aidanns.streams.project.models.AndConstraint</class>
+        <class>com.aidanns.streams.project.models.BaseComparisonConstraint</class>
+        <class>com.aidanns.streams.project.models.OrConstraint</class>
+        <class>com.aidanns.streams.project.models.StringEqualityConstraint</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.ImprovedH2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
     </persistence-unit>
-
+	
 </persistence>
+
