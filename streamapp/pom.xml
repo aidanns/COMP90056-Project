@@ -15,6 +15,9 @@
 			<resource>
 				<directory>${basedir}/conf</directory>
 			</resource>
+			<resource>
+				<directory>${basedir}/input</directory>
+			</resource>
 		</resources>
 		<pluginManagement>
 	      <plugins>
@@ -77,6 +80,11 @@
 			<groupId>com.aidanns.streams.project</groupId>
 			<artifactId>cdr-models</artifactId>
 			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+	        <groupId>com.googlecode.jcsv</groupId>
+	        <artifactId>jcsv</artifactId>
+	        <version>1.4.0</version>
 		</dependency>
             
 	</dependencies>

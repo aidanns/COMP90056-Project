@@ -15,7 +15,7 @@ import backtype.storm.tuple.Tuple;
  * @author Aidan Nagorcka-Smith (aidanns@gmail.com)
  */
 @SuppressWarnings("serial")
-public class RuleChangePrinterBolt extends BaseRichBolt {
+public class DebuggingPrinterBolt extends BaseRichBolt {
 
 	public void prepare(@SuppressWarnings("rawtypes") Map stormConf, TopologyContext context,
 			OutputCollector collector) {}
@@ -23,10 +23,13 @@ public class RuleChangePrinterBolt extends BaseRichBolt {
 	public void execute(Tuple input) {
 		switch (input.getSourceStreamId()) {
 		case "UpdatedRulesStream":
-			Logger.getLogger(RuleChangePrinterBolt.class).debug("Updating a Rule: " + input.getValue(0).toString());
+			Logger.getLogger(DebuggingPrinterBolt.class).debug("Updating a Rule: " + input.getValue(0).toString());
 			break;
 		case "RemovedRuleIdsStream":
-			Logger.getLogger(RuleChangePrinterBolt.class).debug("Removing a Rule: " + input.getValue(0).toString());
+			Logger.getLogger(DebuggingPrinterBolt.class).debug("Removing a Rule: " + input.getValue(0).toString());
+			break;
+		case "CallDataRecordStream":
+			Logger.getLogger(DebuggingPrinterBolt.class).debug("Processing a CDR: " + input.getValue(0).toString());
 			break;
 		}
 	}
