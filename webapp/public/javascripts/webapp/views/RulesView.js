@@ -1,6 +1,7 @@
 define(function(require) {
   var Backbone = require("backbone");
   var RuleView = require("webapp/views/RuleView");
+  var _ = require("underscore");
 
   return Backbone.View.extend({
     template: _.template(

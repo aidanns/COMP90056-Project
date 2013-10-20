@@ -10,7 +10,7 @@ define(function(require) {
 	className: "rule",
 	
     template: _.template(
-    		'<td class="name"> {{ name }} </td>' +
+    		'<td class="name"> <%= name %> </td>' +
     		'<td class="delete">X</td>'),
     
     initialize: function(options) {
