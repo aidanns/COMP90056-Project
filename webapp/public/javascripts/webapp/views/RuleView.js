@@ -4,11 +4,14 @@ define(function(require) {
   var Rule = require("webapp/models/Rule");
 
   return Backbone.View.extend({
+	
+	tagName: "tr",
+	
+	className: "rule",
+	
     template: _.template(
-    		'<span class="rule">' +
-    		'    <span class="name"> {{ name }} </span>' +
-    		'    <span class="delete">X</span>' +
-    		'</span>'),
+    		'<td class="name"> {{ name }} </td>' +
+    		'<td class="delete">X</td>'),
     
     initialize: function(options) {
     	this.listenTo(this.model, "change", this.render);

@@ -3,7 +3,14 @@ define(function(require) {
   var RuleView = require("webapp/views/RuleView");
 
   return Backbone.View.extend({
-    template: _.template('<h2> Here is a list of Rules: </h2>'),
+    template: _.template(
+    		'<h2> Rules: </h2>' +
+    		'<table>' +
+    		'  <tr>' +
+    		'    <th>Name</th>' +
+    		'    <th>Remove</th>' +
+    		'  </tr>' +
+    		'</table>'),
     
     initialize: function(options) {
     	this.listenTo(this.collection, 'add', this.addOne);
@@ -22,7 +29,7 @@ define(function(require) {
     addOne: function(model) {
     	var view = new RuleView({model: model});
     	view.render();
-    	this.$el.append(view.el);
+    	$('table', this.$el).append(view.el);
     	model.on('remove', view.remove, view);
     }
   });
