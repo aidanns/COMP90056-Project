@@ -4,6 +4,7 @@ define(function(require) {
   var _ = require("underscore");
 
   return Backbone.View.extend({
+	  
     template: _.template(
     		'<h2> Rules: </h2>' +
     		'<table>' +
@@ -20,8 +21,13 @@ define(function(require) {
     		'</table>' +
     		'<button class="addRule">Add Rule</button>'),
     
+    events: {
+    	"click .addRule": "addRule"
+    },
+    		
     initialize: function(options) {
     	this.listenTo(this.collection, 'add', this.addOne);
+    	this.listenTo(this.collection, "reset", this.render);
     },
     
     render: function() {
@@ -39,6 +45,10 @@ define(function(require) {
     	view.render();
     	$('table', this.$el).append(view.el);
     	model.on('remove', view.remove, view);
+    },
+    
+    addRule: function() {
+    	Backbone.history.navigate("/add", {trigger: true});
     }
   });
 });

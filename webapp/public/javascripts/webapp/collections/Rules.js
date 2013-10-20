@@ -4,6 +4,6 @@ define(function(require) {
 
   return Backbone.Collection.extend({
     model: Rule,
-    url: 'api/rule'
+    url: '/api/rule'
   });
 });

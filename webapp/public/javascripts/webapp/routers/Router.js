@@ -1,30 +1,84 @@
 define(function(require) {
   var Backbone = require("backbone");
+  var Rule = require("webapp/models/Rule");
   var Rules = require("webapp/collections/Rules");
   var RulesView = require("webapp/views/RulesView");
+  var HomeView = require("webapp/views/HomeView");
+  var EditRuleView = require("webapp/views/EditRuleView");
 
   return Backbone.Router.extend({
 	  
 	initialize: function(options) {
 		this.el = options.el;
+		
+		this.$el = $(this.el);
+		
+		_(this.routes).each(function(destination) {
+			_(this.routes).each(function(other) {
+				if (destination === other) return;
+				this.on('route:' + destination, this['reset_' + other], this);
+			}, this);
+		}, this);
 	},
 	  
     // Mapping from route to the function that is called to execute that route.
     routes: {
-      "": "rules",
-      "rules": "rules"
+      "": "home",
+      "rules": "rules",
+      "edit/:id": "edit",
+      "add": "add"
     },
 
     // When we execute the home route, print something to the console so we know it's working.
     home: function() {
       console.log("Went to the home route.");
+      this.homeView = new HomeView().render();
+      this.$el.append(this.homeView.el);
+    },
+    
+    reset_home: function() {
+    	if (this.homeView) {
+    		this.homeView.remove();
+    	}
     },
     
     rules: function() {
       console.log("Went to the rules route.");
-      var rules = new Rules();
-      rules.fetch();
-      var rulesView = new RulesView({collection: rules, el: this.el}).render();
+      if (!this.rulesCollection) {
+    	  this.rulesCollection = new Rules();
+    	  this.rulesCollection.fetch();
+      }
+      this.rulesView = new RulesView({collection: this.rulesCollection}).render();
+      this.$el.append(this.rulesView.el);
+    },
+    
+    reset_rules: function() {
+      if (this.rulesView) {
+    	  this.rulesView.remove();
+      }
+    },
+    
+    edit: function(id) {
+    	console.log("Went to the edit route.");
+    	this.editRuleView = new EditRuleView({model: this.rulesCollection.get(id)}).render();
+    	this.$el.append(this.editRuleView.el);
+    },
+    
+    reset_edit: function() {
+    	if (this.editRuleView) {
+    		this.editRuleView.remove();
+    	}
+    },
+    
+    add: function() {
+    	this.addRuleView = new EditRuleView({model: new Rule()}).render();
+    	this.$el.append(this.addRuleView.el);
+    },
+    
+    reset_add: function() {
+    	if (this.addRuleView) {
+    		this.addRuleView.remove();
+    	}
     }
   });
 });

@@ -11,7 +11,8 @@ define(function(require) {
 	
 	events: {
 		"click .remove": "destroy",
-		"click .active": "toggleActive"
+		"click .active": "toggleActive",
+		"click .edit": "edit"
 	},
 	
     template: _.template(
@@ -41,6 +42,10 @@ define(function(require) {
     toggleActive: function() {
     	this.model.set("active", !this.model.get("active"));
     	this.model.save();
+    },
+    
+    edit: function() {
+    	Backbone.history.navigate("/edit/" + this.model.id, {trigger: true});
     }
   });
 });

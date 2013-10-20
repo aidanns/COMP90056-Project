@@ -2,9 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                           controllers.Application.index()
-
 # REST
 GET		/api/rule					controllers.RuleController.index
 POST	/api/rule					controllers.RuleController.create
@@ -20,4 +17,8 @@ GET		/show/rule					controllers.DebuggingController.showAllRules()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+# Home page
+GET     /*ignored                   controllers.Application.index(ignored)
+GET		/							controllers.Application.index(ignored = "")
 
