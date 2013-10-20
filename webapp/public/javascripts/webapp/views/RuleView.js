@@ -14,9 +14,14 @@ define(function(require) {
 	},
 	
     template: _.template(
-    		'<td class="id"> <%= id %> </td>' +
-    		'<td class="name"> <%= name %> </td>' +
-    		'<td class="remove">X</td>'),
+    		'<td> <%= id %> </td>' +
+    		'<td> <%= name %> </td>' +
+    		'<td> <%= windowSize %> </td>' +
+    		'<td> <%= numberOfConstraintMatches %> </td>' +
+    		'<td> <%= constraint %> </td>' +
+    		'<td> <%= active %> </td>' +
+    		'<td><button class="remove">Remove</button></td>' +
+    		'<td><button class="edit">Edit</button></td>'),
     
     initialize: function(options) {
     	this.listenTo(this.model, "change", this.render);

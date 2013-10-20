@@ -10,9 +10,15 @@ define(function(require) {
     		'  <tr>' +
     		'    <th>Id</th>' +
     		'    <th>Name</th>' +
-    		'    <th>Remove</th>' +
+    		'    <th>Window Size (Seconds)</th>' +
+    		'    <th># Constraint Matches Needed</th>' +
+    		'    <th>Constraint</th>' +
+    		'    <th>Rule Active?</th>' +
+    		'    <th></th>' +
+    		'    <th></th>' +
     		'  </tr>' +
-    		'</table>'),
+    		'</table>' +
+    		'<button class="addRule">Add Rule</button>'),
     
     initialize: function(options) {
     	this.listenTo(this.collection, 'add', this.addOne);
