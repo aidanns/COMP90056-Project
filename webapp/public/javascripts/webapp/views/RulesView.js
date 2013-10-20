@@ -8,6 +8,7 @@ define(function(require) {
     		'<h2> Rules: </h2>' +
     		'<table>' +
     		'  <tr>' +
+    		'    <th>Id</th>' +
     		'    <th>Name</th>' +
     		'    <th>Remove</th>' +
     		'  </tr>' +

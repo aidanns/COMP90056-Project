@@ -1,7 +1,5 @@
 define(function(require) {
   var Backbone = require("backbone");
 
-  return Backbone.Model.extend({
-    url: "/api/rule"
-  });
+  return Backbone.Model.extend();
 });
