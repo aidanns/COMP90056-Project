@@ -10,7 +10,8 @@ define(function(require) {
 	className: "rule",
 	
 	events: {
-		"click .remove": "destroy"
+		"click .remove": "destroy",
+		"click .active": "toggleActive"
 	},
 	
     template: _.template(
@@ -19,7 +20,7 @@ define(function(require) {
     		'<td> <%= windowSize %> </td>' +
     		'<td> <%= numberOfConstraintMatches %> </td>' +
     		'<td> <%= constraint %> </td>' +
-    		'<td> <%= active %> </td>' +
+    		'<td class="active"> <%= active %> </td>' +
     		'<td><button class="remove">Remove</button></td>' +
     		'<td><button class="edit">Edit</button></td>'),
     
@@ -35,6 +36,11 @@ define(function(require) {
     
     destroy: function() {
     	this.model.destroy();
+    },
+    
+    toggleActive: function() {
+    	this.model.set("active", !this.model.get("active"));
+    	this.model.save();
     }
   });
 });
