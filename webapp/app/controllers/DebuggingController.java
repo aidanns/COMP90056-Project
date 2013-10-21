@@ -1,9 +1,12 @@
 package controllers;
 
+import java.util.Date;
+
 import com.aidanns.streams.project.models.CallDataRecord.CDRType;
 import com.aidanns.streams.project.models.Constraint;
 import com.aidanns.streams.project.models.ConstraintFactory;
 import com.aidanns.streams.project.models.Rule;
+import com.aidanns.streams.project.models.RuleMatch;
 
 import play.db.jpa.JPA;
 import play.db.jpa.Transactional;
@@ -51,7 +54,19 @@ public class DebuggingController extends Controller {
      	return ok("Rules: " + JPA.em().createQuery("SELECT r from Rule r", Rule.class).getResultList().toString() + "\n\n" 
      			+ "Constraints: " + JPA.em().createQuery("SELECT c from Constraint c", Constraint.class).getResultList().toString());
      }
-   
+     
+     /**
+      * Add a match
+      * @return All the matches currently in the database.
+      */
+     @Transactional
+     public static Result addMatch() {
+    	 RuleMatch m = new RuleMatch();
+    	 m.timestamp = new Date();
+    	 JPA.em().persist(m);
+    	 return RuleMatchController.index();
+     }
+     
      /**
       * Show the rules that are currently in the database.
       * @return All the rules that are currently in the database.

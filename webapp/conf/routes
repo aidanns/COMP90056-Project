@@ -18,6 +18,7 @@ DELETE	/api/match/:id				controllers.RuleMatchController.delete(id: Long)
 # DB Test Operations
 GET		/create/one					controllers.DebuggingController.addRuleOne()
 GET		/create/two					controllers.DebuggingController.addRuleTwo()
+GET		/create/match				controllers.DebuggingController.addMatch()
 GET		/show/constraint			controllers.DebuggingController.showAllConstraints()
 GET		/show/rule					controllers.DebuggingController.showAllRules()
 
