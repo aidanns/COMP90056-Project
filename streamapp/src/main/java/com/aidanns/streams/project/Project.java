@@ -35,7 +35,9 @@ public class Project {
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
 				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
 				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream")
-				.shuffleGrouping("rule-matcher", "MatchedRuleIdsStream");
+				.shuffleGrouping("rule-matcher", "RuleMatchStream");
+		builder.setBolt("rule-match-uploader", new UploadMatchBolt(), 1)
+				.shuffleGrouping("rule-matcher", "RuleMatchStream");
 		
 		// Start the job.
 		Config conf = new Config();

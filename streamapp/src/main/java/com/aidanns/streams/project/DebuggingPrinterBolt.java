@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.aidanns.streams.project.models.RuleMatch;
+
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -31,8 +33,8 @@ public class DebuggingPrinterBolt extends BaseRichBolt {
 		case "CallDataRecordStream":
 //			Logger.getLogger(DebuggingPrinterBolt.class).debug("Processing a CDR: " + input.getValue(0).toString());
 			break;
-		case "MatchedRuleIdsStream":
-			Logger.getLogger(DebuggingPrinterBolt.class).debug("Matched a rule: " + input.getValueByField("id").toString() + " With CDRs: " + input.getValueByField("rules").toString());
+		case "RuleMatchStream":
+//			Logger.getLogger(DebuggingPrinterBolt.class).debug("Match: " + ((RuleMatch)input.getValue(0)).toJson());
 		}
 	}
 

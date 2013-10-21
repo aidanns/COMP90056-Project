@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -71,6 +72,7 @@ public class StringEqualityConstraint extends BaseComparisonConstraint {
 		return true;
 	}
 	
+	@Transient
 	private SimpleDateFormat _dateParser = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 
 	@Override

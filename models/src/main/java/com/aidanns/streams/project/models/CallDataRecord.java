@@ -1,13 +1,25 @@
 package com.aidanns.streams.project.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 /**
  * Representation of a GSM Call Data Record.
  * @author Aidan Nagorcka-Smith (aidanns@gmail.com)
  */
+@Entity
 public class CallDataRecord {
 	
 	/**
@@ -127,21 +139,102 @@ public class CallDataRecord {
 		}
 	}
 	
-	private CDRType _cdrType;
-	private String _imsi;
-	private String _imei;
-	private String _callingNumber;
-	private String _calledNumber;
-	private String _recordingEntity;
-	private String _location;
-	private String _callReference;
-	private Float _callDuration;
-	private Date _answerTime;
-	private Date _seizureTime;
-	private Date _releaseTime;
-	private CauseForTermination _causeForTermination;
-	private String _basicService;
-	private String _mscAddress;
+	@Id
+	@GeneratedValue
+	public Long id;
+	
+	@Basic private CDRType _cdrType;
+	@Basic private String _imsi;
+	@Basic private String _imei;
+	@Basic private String _callingNumber;
+	@Basic private String _calledNumber;
+	@Basic private String _recordingEntity;
+	@Basic private String _location;
+	@Basic private String _callReference;
+	@Basic private Float _callDuration;
+	@Basic private Date _answerTime;
+	@Basic private Date _seizureTime;
+	@Basic private Date _releaseTime;
+	@Basic private CauseForTermination _causeForTermination;
+	@Basic private String _basicService;
+	@Basic private String _mscAddress;
+	
+	static private SimpleDateFormat _dateParser = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+	
+	public ObjectNode toJson() {
+		ObjectNode object = JsonNodeFactory.instance.objectNode();
+		object.put("cdrType", _cdrType.getAbbreviation());
+		object.put("imsi", _imsi);
+		object.put("imei", _imei);
+		object.put("callingNumber", _callingNumber);
+		object.put("calledNumber", _calledNumber);
+		object.put("recordingEntity", _recordingEntity);
+		object.put("location", _location);
+		object.put("callReference", _callReference);
+		object.put("callDuration", _callDuration);
+		object.put("answerTime", _answerTime == null ? null : _dateParser.format(_answerTime));
+		object.put("seizureTime", _seizureTime == null ? null : _dateParser.format(_seizureTime));
+		object.put("releaseTime", _releaseTime == null ? null : _dateParser.format(_releaseTime));
+		object.put("causeForTermination", _causeForTermination.getAbbreviation());
+		object.put("basicService", _basicService);
+		object.put("mscAddress", _mscAddress);
+		return object;
+	}
+	
+	public static CallDataRecord fromJson(JsonNode jsonObject) {
+		Long id = jsonObject.get("id") == null ? null : jsonObject.get("id").asLong();
+		CDRType cdrType = jsonObject.get("cdrType") == null ? null : CDRType.fromAbbreviation(jsonObject.get("cdrType").asText());
+		String imsi = jsonObject.get("imsi") == null ? null : jsonObject.get("imsi").asText();
+		String imei = jsonObject.get("imei") == null ? null : jsonObject.get("imei").asText();
+		String callingNumber = jsonObject.get("callingNumber") == null ? null : jsonObject.get("callingNumber").asText();
+		String calledNumber = jsonObject.get("calledNumber") == null ? null : jsonObject.get("calledNumber").asText();
+		String recordingEntity = jsonObject.get("recordingEntity") == null ? null : jsonObject.get("recordingEntity").asText();
+		String location = jsonObject.get("location") == null ? null : jsonObject.get("location").asText();
+		String callReference = jsonObject.get("callReference") == null ? null : jsonObject.get("callReference").asText();
+		Double callDuration = jsonObject.get("callDuration") == null ? null : jsonObject.get("callDuration").asDouble();
+		Date answerTime;
+		try {
+			answerTime = jsonObject.get("answerTime") == null ? null : _dateParser.parse(jsonObject.get("answerTime").asText());
+		} catch (ParseException e) {
+			answerTime = null;
+		}
+		Date seizureTime;
+		try {
+			seizureTime = jsonObject.get("seizureTime") == null ? null : _dateParser.parse(jsonObject.get("seizureTime").asText());
+		} catch (ParseException e) {
+			seizureTime = null;
+		}
+		Date releaseTime;
+		try {
+			releaseTime = jsonObject.get("releaseTime") == null ? null : _dateParser.parse(jsonObject.get("releaseTime").asText());
+		} catch (ParseException e) {
+			releaseTime = null;
+		}
+		CauseForTermination causeForTermination = jsonObject.get("causeForTermination") == null ? null : CauseForTermination.fromAbbreviation(jsonObject.get("causeForTermination").asText());
+		String basicService = jsonObject.get("basicService") == null ? null : jsonObject.get("basicService").asText();
+		String mscAddress = jsonObject.get("mscAddress") == null ? null : jsonObject.get("mscAddress").asText();
+		
+		if (cdrType == null || imsi == null || imei == null || callingNumber == null || calledNumber == null
+				|| recordingEntity == null || location == null || callReference == null || callDuration == null
+				|| answerTime == null || releaseTime == null || causeForTermination == null || basicService == null
+				|| mscAddress == null) {
+			// seizureTime may be null, but everything else must be filled in.
+			CallDataRecord cdr = new CallDataRecord(cdrType, imsi, imei, callingNumber, calledNumber, 
+					recordingEntity, location, callReference, callDuration.floatValue(), answerTime, 
+					seizureTime, releaseTime, causeForTermination, basicService, mscAddress);
+			System.out.println(cdr.toString());
+			return null;
+		} else {
+			CallDataRecord cdr = new CallDataRecord(cdrType, imsi, imei, callingNumber, calledNumber, 
+					recordingEntity, location, callReference, callDuration.floatValue(), answerTime, 
+					seizureTime, releaseTime, causeForTermination, basicService, mscAddress);
+			cdr.id = id;
+			return cdr;
+			
+		}
+	}
+	
+	public CallDataRecord() { /* Needed for Hibernate. */ };
 	
 	/**
 	 * Create a new CallDataRecord. See the GSM specification for details of the contents of each field.
@@ -258,4 +351,6 @@ public class CallDataRecord {
 				+ _causeForTermination + ", _basicService=" + _basicService
 				+ ", _mscAddress=" + _mscAddress + "]";
 	}
+	
+
 }

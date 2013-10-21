@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.aidanns.streams.project.models.CallDataRecord;
 import com.aidanns.streams.project.models.Rule;
+import com.aidanns.streams.project.models.RuleMatch;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -42,10 +43,13 @@ public class RuleMatchingBolt extends BaseRichBolt {
 			CallDataRecord cdr = (CallDataRecord) input.getValueByField("CallDataRecord");
 			for (Rule rule : _idRuleMap.values()) {
 				if (rule.active) {
-					rule.offer(cdr);
-				}
-				if (rule.isMatched()) {
-					_collector.emit("MatchedRuleIdsStream", new Values(rule.id, rule.matchedCallDataRecords()));
+					if (rule.offer(cdr) && rule.isMatched()) {
+						RuleMatch match = new RuleMatch();
+						match.timestamp = cdr.releaseTime();
+						match.ruleId = rule.id;
+						match.callDataRecords.addAll(rule.matchedCallDataRecords());
+						_collector.emit("RuleMatchStream", new Values(match));
+					}
 				}
 			}
 			break;
@@ -54,7 +58,7 @@ public class RuleMatchingBolt extends BaseRichBolt {
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declareStream("MatchedRuleIdsStream", new Fields("id", "rules"));
+		declarer.declareStream("RuleMatchStream", new Fields("match"));
 	}
 
 }

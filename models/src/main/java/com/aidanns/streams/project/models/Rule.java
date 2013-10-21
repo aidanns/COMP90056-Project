@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -57,13 +58,16 @@ public class Rule {
 	public Integer numberOfConstraintMatches;
 	
 	// Timestamps for individual matches against the constraint.
+	@Transient
 	private PriorityQueue<CallDataRecord> _matchedCDRs = new PriorityQueue<CallDataRecord>(10, new Comparator<CallDataRecord>() {
 		@Override
 		public int compare(CallDataRecord o1, CallDataRecord o2) {
 			return o1.releaseTime().compareTo(o2.releaseTime());
 		}
 	});
+	
 	// Whether the rule as a whole is currently matched for this window.
+	@Transient
 	private boolean _ruleIsMatched = false;
 	
 	/**
@@ -82,8 +86,9 @@ public class Rule {
 	 * moves the window so that it is ended by the release time of the current CDR,
 	 * discarding any matches that are now out of date.
 	 * @param cdr The CallDataRecord to check.
+	 * @return true if the CDR was matched by the constraint.
 	 */
-	public void offer(CallDataRecord cdr) {
+	public boolean offer(CallDataRecord cdr) {
 		// Remove any previous matches that are now out of date.
 		Date currentTimeStamp = cdr.releaseTime();
 		while (_matchedCDRs.peek() != null && dateIsOutOfWindow(_matchedCDRs.peek().releaseTime(), currentTimeStamp)) {
@@ -91,7 +96,9 @@ public class Rule {
 		}
 		
 		// Check the cdr against the constraint.
-		if (this.constraint.matches(cdr)) {
+		
+		boolean matchedConstraint = this.constraint.matches(cdr);
+		if (matchedConstraint) {
 			_matchedCDRs.add(cdr);
 		}
 		
@@ -101,12 +108,15 @@ public class Rule {
 		} else {
 			_ruleIsMatched = false;
 		}
+		
+		return matchedConstraint;
 	}
 	
 	/**
 	 * Get a list of the CDRs that have been matched in the current window.
 	 * @return A list of CallDataRecords.
 	 */
+	@Transient
 	public List<CallDataRecord> matchedCallDataRecords() {
 		return new ArrayList<CallDataRecord>(_matchedCDRs);
 	}
