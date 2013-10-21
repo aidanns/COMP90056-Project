@@ -63,6 +63,7 @@ public class DebuggingController extends Controller {
      public static Result addMatch() {
     	 RuleMatch m = new RuleMatch();
     	 m.timestamp = new Date();
+    	 m.ruleId = 0L;
     	 JPA.em().persist(m);
     	 return RuleMatchController.index();
      }

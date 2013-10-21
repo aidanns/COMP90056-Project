@@ -76,8 +76,9 @@ public class RuleMatchController extends Controller {
 	 	if (match == null) {
 	 		return badRequest("No rule exists with id " + id);
 	 	}
-		//
+		
 	 	match.timestamp = postedMatch.timestamp;
+	 	match.ruleId = postedMatch.ruleId;
 		
 	 	JPA.em().persist(match);
 	 	return ok(match.toJson());

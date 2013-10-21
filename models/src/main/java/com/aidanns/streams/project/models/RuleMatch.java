@@ -29,6 +29,9 @@ public class RuleMatch {
 	
 	@Basic
 	public Date timestamp;
+	
+	@Basic
+	public Long ruleId;
 
 	/**
 	 * Get a JSON representation of this Rule.
@@ -37,6 +40,7 @@ public class RuleMatch {
 	public ObjectNode toJson() {
 		ObjectNode object = JsonNodeFactory.instance.objectNode();
 		object.put("timestamp", _dateParser.format(timestamp));
+		object.put("ruleId", ruleId);
 		return object;
 	}
 	
@@ -48,10 +52,11 @@ public class RuleMatch {
 	public static RuleMatch fromJson(JsonNode jsonObject) {
 		RuleMatch match = new RuleMatch();
 		try {
-			match.timestamp = jsonObject.get("timestamp").asText() == null ? null : _dateParser.parse(jsonObject.get("timestamp").asText());
+			match.timestamp = jsonObject.get("timestamp") == null ? null : _dateParser.parse(jsonObject.get("timestamp").asText());
 		} catch (ParseException e) {
 			match.timestamp = null;
 		}
+		match.ruleId = jsonObject.get("ruleId") == null ? null : jsonObject.get("ruleId").asLong();
 		return match;
 	}
 }
