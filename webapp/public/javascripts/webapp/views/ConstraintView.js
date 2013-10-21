@@ -100,6 +100,8 @@ define(function(require) {
     },
     
     getConstraint: function() {
+    	if (this.firstChild) { this.constraint.firstChild = this.firstChild.getConstraint(); }
+    	if (this.secondChild) { this.constraint.secondChild = this.secondChild.getConstraint(); }
     	return this.constraint
     },
     

@@ -13,7 +13,6 @@ define(function(require) {
     		'    <th>Name</th>' +
     		'    <th>Window Size (Seconds)</th>' +
     		'    <th># Constraint Matches Needed</th>' +
-    		'    <th>Constraint</th>' +
     		'    <th>Rule Active?</th>' +
     		'    <th></th>' +
     		'    <th></th>' +
