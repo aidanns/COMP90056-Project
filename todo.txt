@@ -1,3 +1,0 @@
-Add constraints to the factory for all fields.
-Add CRUD operations for rules to the REST API.
-Move constraint and rule code in to another module so that it can be shared with Storm.
