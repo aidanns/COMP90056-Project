@@ -19,6 +19,9 @@ define(function(require) {
 				this.on('route:' + destination, this['reset_' + other], this);
 			}, this);
 		}, this);
+		
+  	  this.rulesCollection = new Rules();
+	  this.rulesCollection.fetch();
 	},
 	  
     // Mapping from route to the function that is called to execute that route.
@@ -44,10 +47,6 @@ define(function(require) {
     
     rules: function() {
       console.log("Went to the rules route.");
-      if (!this.rulesCollection) {
-    	  this.rulesCollection = new Rules();
-    	  this.rulesCollection.fetch();
-      }
       this.rulesView = new RulesView({collection: this.rulesCollection}).render();
       this.$el.append(this.rulesView.el);
     },
@@ -55,6 +54,7 @@ define(function(require) {
     reset_rules: function() {
       if (this.rulesView) {
     	  this.rulesView.remove();
+    	  console.log("removing");
       }
     },
     
@@ -62,6 +62,7 @@ define(function(require) {
     	console.log("Went to the edit route.");
     	this.editRuleView = new EditRuleView({model: this.rulesCollection.get(id)}).render();
     	this.$el.append(this.editRuleView.el);
+    	this.editRuleView.getSaveDeferred().done(_.bind(function() {this.rulesCollection.fetch();}, this));
     },
     
     reset_edit: function() {
@@ -73,6 +74,7 @@ define(function(require) {
     add: function() {
     	this.addRuleView = new EditRuleView({model: new Rule()}).render();
     	this.$el.append(this.addRuleView.el);
+    	this.addRuleView.getSaveDeferred().done(_.bind(function() {this.rulesCollection.fetch();}, this));
     },
     
     reset_add: function() {

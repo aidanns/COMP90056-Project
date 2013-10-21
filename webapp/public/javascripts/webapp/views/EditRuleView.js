@@ -2,6 +2,7 @@ define(function(require) {
   var Backbone = require("backbone");
   var _ = require("underscore");
   var Rule = require("webapp/models/Rule");
+  var ConstraintView = require("webapp/views/ConstraintView");
 
   return Backbone.View.extend({
 	  
@@ -15,6 +16,7 @@ define(function(require) {
     		'  <label for="inputNumberOfConstraintMatches"># of Constraint Matches</label>' +
     		'  <input type="text" id="inputNumberOfConstraintMatches" placeholder="# of Constraint Matches" value="<%= numberOfConstraintMatches %>">' +
     		'</form>' +
+    		'<div class="constraint"></div>' +
     		'<button class="save">Save</button>' +
     		'<button class="cancel">Cancel</button>'),
     
@@ -24,7 +26,13 @@ define(function(require) {
     },
     		
     initialize: function(options) {
+    	this.saveDeferred = $.Deferred();
     	this.listenTo(this.model, 'change', this.render);
+    	this.constraintView = new ConstraintView({constraint: this.model.get("constraint")});
+    },
+    
+    getSaveDeferred: function() {
+    	return this.saveDeferred.promise();
     },
     
     render: function() {
@@ -34,6 +42,7 @@ define(function(require) {
     	toRender.windowSize = this.model.get("windowSize") ? this.model.get("windowSize") : "";
     	toRender.numberOfConstraintMatches = this.model.get("numberOfConstraintMatches") ? this.model.get("numberOfConstraintMatches") : "";
     	this.$el.html(this.template(toRender));
+    	$(".constraint", this.$el).html(this.constraintView.render().el);
     	return this;
     },
     
@@ -42,8 +51,14 @@ define(function(require) {
     	this.model.save({
     		name: $("#inputName", this.$el).val(),
     		windowSize: $("#inputWindowSize", this.$el).val(),
-    		numberOfConstraintMatches: $("#inputNumberOfConstraintMatches", this.$el).val()
-    	});
+    		numberOfConstraintMatches: $("#inputNumberOfConstraintMatches", this.$el).val(),
+    		active: this.model.get('active') || true,
+    		constraint: this.constraintView.getConstraint()
+    	}).done(_.bind(function() {
+    		console.log("resolving");
+    		this.saveDeferred.resolve();
+    	}, this));
+    	
     	Backbone.history.navigate("/rules", {trigger: true});
     },
     
