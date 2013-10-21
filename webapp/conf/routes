@@ -9,6 +9,12 @@ GET		/api/rule/:id				controllers.RuleController.read(id: Long)
 PUT		/api/rule/:id				controllers.RuleController.update(id: Long)
 DELETE	/api/rule/:id				controllers.RuleController.delete(id: Long)
 
+GET		/api/match					controllers.RuleMatchController.index
+POST	/api/match					controllers.RuleMatchController.create
+GET		/api/match/:id				controllers.RuleMatchController.read(id: Long)
+PUT		/api/match/:id				controllers.RuleMatchController.update(id: Long)
+DELETE	/api/match/:id				controllers.RuleMatchController.delete(id: Long)
+
 # DB Test Operations
 GET		/create/one					controllers.DebuggingController.addRuleOne()
 GET		/create/two					controllers.DebuggingController.addRuleTwo()

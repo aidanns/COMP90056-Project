@@ -12,6 +12,7 @@
         <class>com.aidanns.streams.project.models.BaseComparisonConstraint</class>
         <class>com.aidanns.streams.project.models.OrConstraint</class>
         <class>com.aidanns.streams.project.models.StringEqualityConstraint</class>
+        <class>com.aidanns.streams.project.models.RuleMatch</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.ImprovedH2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create" />
