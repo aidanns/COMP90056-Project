@@ -22,7 +22,7 @@ A jar built using Maven that contains the POJO representations of the Rules and 
 
 The jar built from `cdr-models` is a dependecy for both `cdr-webapp` and `cdr-streamapp`. To install it to your local maven repository:
 
-    mvn install
+    $ cd models && mvn install
 
 ### cdr-webapp
 
@@ -34,7 +34,7 @@ The API allows for CRUD operations on JSON representations of `Rule` objects (Ja
 
 To run the Play! application:
 
-    play start
+    $ cd webapp && play start
 
 ### cdr-streamapp
 
@@ -42,4 +42,4 @@ A Storm stream processing application that processes a stream of CDRs and matche
 
 To run the Storm application:
 
-    mvn compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=com.aidanns.streams.project.Project
+    $ cd streamapp && mvn compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=com.aidanns.streams.project.Project
