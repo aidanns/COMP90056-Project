@@ -25,11 +25,17 @@ public class Project {
 		builder.setSpout("cdr-spout-2", new CDRSpout("cdr_rawsample_2.txt"));
 		
 		// Setup the bolts
-		builder.setBolt("rule-change-printer", new DebuggingPrinterBolt(), 1)
+		builder.setBolt("rule-matcher", new RuleMatchingBolt(), 1)
 				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
 				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
 				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream");
+		builder.setBolt("rule-change-printer", new DebuggingPrinterBolt(), 1)
+				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
+				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
+				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
+				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream")
+				.shuffleGrouping("rule-matcher", "MatchedRuleIdsStream");
 		
 		// Start the job.
 		Config conf = new Config();

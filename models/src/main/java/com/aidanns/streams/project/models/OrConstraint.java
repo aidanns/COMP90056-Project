@@ -83,4 +83,9 @@ public class OrConstraint extends Constraint {
 			return false;
 		return true;
 	}
+
+	@Override
+	public boolean matches(CallDataRecord cdr) {
+		return firstChild.matches(cdr) || secondChild.matches(cdr);
+	}
 }

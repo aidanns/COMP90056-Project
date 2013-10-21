@@ -1,5 +1,10 @@
 package com.aidanns.streams.project.models;
 
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,6 +54,57 @@ public class Rule {
 	/** Number of times the constraint has to match in a single window for the rule to match. */
 	@Basic 
 	public Integer numberOfConstraintMatches;
+	
+	// Timestamps for individual matches against the constraint.
+	private PriorityQueue<Date> _matchTimeStamps = new PriorityQueue<Date>();
+	// Whether the rule as a whole is currently matched for this window.
+	private boolean _ruleIsMatched = false;
+	
+	/**
+	 * Check whether the given date is out of the window.
+	 * @param date The date to check.
+	 * @param currentDate The current date.
+	 * @return If the date is out of the current window.
+	 */
+	private boolean dateIsOutOfWindow(Date date, Date currentDate) {
+		return (currentDate.getTime() - date.getTime()) > windowSize * 1000;
+	}
+	
+	/**
+	 * Offer a CallDataRecord to this rule, checking if it matches the constraint,
+	 * incrementing the number of matched CDRs if it does. Additionally, this method
+	 * moves the window so that it is ended by the release time of the current CDR,
+	 * discarding any matches that are now out of date.
+	 * @param cdr The CallDataRecord to check.
+	 */
+	public void offer(CallDataRecord cdr) {
+		// Remove any previous matches that are now out of date.
+		Date currentTimeStamp = cdr.releaseTime();
+		while (_matchTimeStamps.peek() != null && dateIsOutOfWindow(_matchTimeStamps.peek(), currentTimeStamp)) {
+			_matchTimeStamps.poll();
+		}
+		
+		// Check the cdr against the constraint.
+		if (this.constraint.matches(cdr)) {
+			_matchTimeStamps.add(new Date());
+		}
+		
+		// If we've got enough matches for this window, set the rule to matched.
+		if (_matchTimeStamps.size() >= numberOfConstraintMatches) {
+			_ruleIsMatched = true;
+		} else {
+			_ruleIsMatched = false;
+		}
+	}
+	
+	/**
+	 * Check whether the current window has enough constraint matches in it to consider the
+	 * whole rule to be matched.
+	 * @return Whether the rule is matched.
+	 */
+	public boolean isMatched() {
+		return _ruleIsMatched;
+	}
 	
 	/**
 	 * Get a JSON representation of this Rule.

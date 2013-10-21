@@ -185,63 +185,63 @@ public class CallDataRecord {
 		this._mscAddress = _mscAddress;
 	}
 
-	public CDRType get_cdrType() {
+	public CDRType cdrType() {
 		return _cdrType;
 	}
 
-	public String get_imsi() {
+	public String imsi() {
 		return _imsi;
 	}
 
-	public String get_imei() {
+	public String imei() {
 		return _imei;
 	}
 
-	public String get_callingNumber() {
+	public String callingNumber() {
 		return _callingNumber;
 	}
 
-	public String get_calledNumber() {
+	public String calledNumber() {
 		return _calledNumber;
 	}
 
-	public String get_recordingEntity() {
+	public String recordingEntity() {
 		return _recordingEntity;
 	}
 
-	public String get_location() {
+	public String location() {
 		return _location;
 	}
 
-	public String get_callReference() {
+	public String callReference() {
 		return _callReference;
 	}
 
-	public Float get_callDuration() {
+	public Float callDuration() {
 		return _callDuration;
 	}
 
-	public Date get_answerTime() {
+	public Date answerTime() {
 		return _answerTime;
 	}
 
-	public Date get_seizureTime() {
+	public Date seizureTime() {
 		return _seizureTime;
 	}
 
-	public Date get_releaseTime() {
+	public Date releaseTime() {
 		return _releaseTime;
 	}
 
-	public CauseForTermination get_causeForTermination() {
+	public CauseForTermination causeForTermination() {
 		return _causeForTermination;
 	}
 
-	public String get_basicService() {
+	public String basicService() {
 		return _basicService;
 	}
 
-	public String get_mscAddress() {
+	public String mscAddress() {
 		return _mscAddress;
 	}
 

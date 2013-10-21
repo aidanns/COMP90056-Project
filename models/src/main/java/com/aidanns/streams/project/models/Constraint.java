@@ -29,4 +29,11 @@ public abstract class Constraint {
 	 */
 	public abstract ObjectNode toJson();
 	
+	/**
+	 * Return true if an individual CallDataRecord matches this constraint.
+	 * @param cdr The CDR to check.
+	 * @return True if the CDR matches the constraint.
+	 */
+	public abstract boolean matches(CallDataRecord cdr);
+	
 }
