@@ -1,8 +1,6 @@
 package com.aidanns.streams.project;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.aidanns.streams.project.models.CallDataRecord;
@@ -47,7 +45,7 @@ public class RuleMatchingBolt extends BaseRichBolt {
 					rule.offer(cdr);
 				}
 				if (rule.isMatched()) {
-					_collector.emit("MatchedRuleIdsStream", new Values(rule.id));
+					_collector.emit("MatchedRuleIdsStream", new Values(rule.id, rule.matchedCallDataRecords()));
 				}
 			}
 			break;
@@ -56,7 +54,7 @@ public class RuleMatchingBolt extends BaseRichBolt {
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declareStream("MatchedRuleIdsStream", new Fields("id"));
+		declarer.declareStream("MatchedRuleIdsStream", new Fields("id", "rules"));
 	}
 
 }

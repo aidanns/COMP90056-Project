@@ -1,9 +1,10 @@
 package com.aidanns.streams.project.models;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -56,7 +57,12 @@ public class Rule {
 	public Integer numberOfConstraintMatches;
 	
 	// Timestamps for individual matches against the constraint.
-	private PriorityQueue<Date> _matchTimeStamps = new PriorityQueue<Date>();
+	private PriorityQueue<CallDataRecord> _matchedCDRs = new PriorityQueue<CallDataRecord>(10, new Comparator<CallDataRecord>() {
+		@Override
+		public int compare(CallDataRecord o1, CallDataRecord o2) {
+			return o1.releaseTime().compareTo(o2.releaseTime());
+		}
+	});
 	// Whether the rule as a whole is currently matched for this window.
 	private boolean _ruleIsMatched = false;
 	
@@ -80,21 +86,29 @@ public class Rule {
 	public void offer(CallDataRecord cdr) {
 		// Remove any previous matches that are now out of date.
 		Date currentTimeStamp = cdr.releaseTime();
-		while (_matchTimeStamps.peek() != null && dateIsOutOfWindow(_matchTimeStamps.peek(), currentTimeStamp)) {
-			_matchTimeStamps.poll();
+		while (_matchedCDRs.peek() != null && dateIsOutOfWindow(_matchedCDRs.peek().releaseTime(), currentTimeStamp)) {
+			_matchedCDRs.poll();
 		}
 		
 		// Check the cdr against the constraint.
 		if (this.constraint.matches(cdr)) {
-			_matchTimeStamps.add(new Date());
+			_matchedCDRs.add(cdr);
 		}
 		
 		// If we've got enough matches for this window, set the rule to matched.
-		if (_matchTimeStamps.size() >= numberOfConstraintMatches) {
+		if (_matchedCDRs.size() >= numberOfConstraintMatches) {
 			_ruleIsMatched = true;
 		} else {
 			_ruleIsMatched = false;
 		}
+	}
+	
+	/**
+	 * Get a list of the CDRs that have been matched in the current window.
+	 * @return A list of CallDataRecords.
+	 */
+	public List<CallDataRecord> matchedCallDataRecords() {
+		return new ArrayList<CallDataRecord>(_matchedCDRs);
 	}
 	
 	/**

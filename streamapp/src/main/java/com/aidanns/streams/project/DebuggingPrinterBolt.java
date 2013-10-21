@@ -32,7 +32,7 @@ public class DebuggingPrinterBolt extends BaseRichBolt {
 //			Logger.getLogger(DebuggingPrinterBolt.class).debug("Processing a CDR: " + input.getValue(0).toString());
 			break;
 		case "MatchedRuleIdsStream":
-			Logger.getLogger(DebuggingPrinterBolt.class).debug("Matched a rule: " + input.getValueByField("id").toString());
+			Logger.getLogger(DebuggingPrinterBolt.class).debug("Matched a rule: " + input.getValueByField("id").toString() + " With CDRs: " + input.getValueByField("rules").toString());
 		}
 	}
 
