@@ -39,15 +39,14 @@ define(function(require) {
     	// In case the model hasn't yet loaded.
     	var toRender = {}
     	toRender.name = this.model.get("name") ? this.model.get("name") : "";
-    	toRender.windowSize = this.model.get("windowSize") ? this.model.get("windowSize") : "";
-    	toRender.numberOfConstraintMatches = this.model.get("numberOfConstraintMatches") ? this.model.get("numberOfConstraintMatches") : "";
+    	toRender.windowSize = _.isNumber(this.model.get("windowSize")) ? this.model.get("windowSize") : "";
+    	toRender.numberOfConstraintMatches = _.isNumber(this.model.get("numberOfConstraintMatches")) ? this.model.get("numberOfConstraintMatches") : "";
     	this.$el.html(this.template(toRender));
     	$(".constraint", this.$el).html(this.constraintView.render().el);
     	return this;
     },
     
     save: function() {
-    	console.log("Saving");
     	this.model.save({
     		name: $("#inputName", this.$el).val(),
     		windowSize: $("#inputWindowSize", this.$el).val(),
@@ -55,15 +54,12 @@ define(function(require) {
     		active: _.isBoolean(this.model.get('active')) ? this.model.get("active") : true,
     		constraint: this.constraintView.getConstraint()
     	}).done(_.bind(function() {
-    		console.log("resolving");
     		this.saveDeferred.resolve();
     	}, this));
-    	
-    	Backbone.history.navigate("/rules", {trigger: true});
+		Backbone.history.navigate("/rules", {trigger: true});;
     },
     
     cancel: function() {
-    	console.log("Cancelling.");
     	Backbone.history.navigate("/rules", {trigger: true});
     }
   });
