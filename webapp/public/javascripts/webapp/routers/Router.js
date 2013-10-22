@@ -5,6 +5,8 @@ define(function(require) {
   var RulesView = require("webapp/views/RulesView");
   var HomeView = require("webapp/views/HomeView");
   var EditRuleView = require("webapp/views/EditRuleView");
+  var Matches = require("webapp/collections/Matches");
+  var MatchesView = require("webapp/views/MatchesView");
 
   return Backbone.Router.extend({
 	  
@@ -22,6 +24,9 @@ define(function(require) {
 		
   	  this.rulesCollection = new Rules();
 	  this.rulesCollection.fetch();
+	  
+	  this.matchesCollection = new Matches();
+	  this.matchesCollection.fetch();
 	},
 	  
     // Mapping from route to the function that is called to execute that route.
@@ -29,7 +34,8 @@ define(function(require) {
       "": "home",
       "rules": "rules",
       "edit/:id": "edit",
-      "add": "add"
+      "add": "add",
+      "matches": "matches"
     },
 
     // When we execute the home route, print something to the console so we know it's working.
@@ -56,6 +62,17 @@ define(function(require) {
     	  this.rulesView.remove();
     	  console.log("removing");
       }
+    },
+    
+    matches: function() {
+    	this.matchesView = new MatchesView({collection: this.matchesCollection}).render();
+    	this.$el.append(this.matchesView.el);
+    },
+    
+    reset_matches: function() {
+    	if (this.matchesView) {
+    		this.matchesView.remove();
+    	}
     },
     
     edit: function(id) {

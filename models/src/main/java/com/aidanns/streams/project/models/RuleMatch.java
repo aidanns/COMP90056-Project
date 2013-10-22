@@ -58,6 +58,7 @@ public class RuleMatch {
 		object.put("timestamp", _dateParser.format(timestamp));
 		object.put("ruleId", ruleId);
 		object.put("imsi", imsi);
+		object.put("id", id);
 		
 		ArrayNode array = JsonNodeFactory.instance.arrayNode();
 		for (CallDataRecord cdr : callDataRecords) {

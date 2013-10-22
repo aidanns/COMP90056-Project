@@ -6,10 +6,12 @@ define(function(require) {
 	  
     template: _.template(
     		'<h2> Home </h2>' +
-    		'<button class="showRules">Show Rules</button>'),
+    		'<button class="showRules">Show Rules</button>' +
+    		'<button class="showMatches">Show Matches</button>'),
     
     events: {
-    	"click .showRules": "showRules"
+    	"click .showRules": "showRules",
+    	"click .showMatches": "showMatches"
     },		
     		
     render: function() {
@@ -19,6 +21,10 @@ define(function(require) {
     
     showRules: function() {
     	Backbone.history.navigate("/rules", {trigger: true});
+    },
+    
+    showMatches: function() {
+    	Backbone.history.navigate("/matches", {trigger: true});
     }
   });
 });
