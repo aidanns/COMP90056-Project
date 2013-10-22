@@ -52,7 +52,7 @@ define(function(require) {
     		name: $("#inputName", this.$el).val(),
     		windowSize: $("#inputWindowSize", this.$el).val(),
     		numberOfConstraintMatches: $("#inputNumberOfConstraintMatches", this.$el).val(),
-    		active: this.model.get('active') || true,
+    		active: _.isBoolean(this.model.get('active')) ? this.model.get("active") : true,
     		constraint: this.constraintView.getConstraint()
     	}).done(_.bind(function() {
     		console.log("resolving");
