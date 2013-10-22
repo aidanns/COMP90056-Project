@@ -79,6 +79,7 @@ public class RuleMatchController extends Controller {
 		
 	 	match.timestamp = postedMatch.timestamp;
 	 	match.ruleId = postedMatch.ruleId;
+	 	match.imsi = postedMatch.imsi;
 		
 	 	JPA.em().persist(match);
 	 	return ok(match.toJson());

@@ -43,11 +43,12 @@ public class RuleMatchingBolt extends BaseRichBolt {
 			CallDataRecord cdr = (CallDataRecord) input.getValueByField("CallDataRecord");
 			for (Rule rule : _idRuleMap.values()) {
 				if (rule.active) {
-					if (rule.offer(cdr) && rule.isMatched()) {
+					if (rule.offer(cdr) && rule.isMatched(cdr.imsi())) {
 						RuleMatch match = new RuleMatch();
+						match.imsi = cdr.imsi();
 						match.timestamp = cdr.releaseTime();
 						match.ruleId = rule.id;
-						match.callDataRecords.addAll(rule.matchedCallDataRecords());
+						match.callDataRecords.addAll(rule.matchedCallDataRecords(cdr.imsi()));
 						_collector.emit("RuleMatchStream", new Values(match));
 					}
 				}

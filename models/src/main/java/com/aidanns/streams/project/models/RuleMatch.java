@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
@@ -35,6 +34,10 @@ public class RuleMatch {
 	@GeneratedValue
 	public Long id;
 	
+	/** The IMSI of the user that the match was for. */
+	@Basic
+	public String imsi;
+	
 	@Basic
 	public Date timestamp;
 	
@@ -54,6 +57,7 @@ public class RuleMatch {
 		ObjectNode object = JsonNodeFactory.instance.objectNode();
 		object.put("timestamp", _dateParser.format(timestamp));
 		object.put("ruleId", ruleId);
+		object.put("imsi", imsi);
 		
 		ArrayNode array = JsonNodeFactory.instance.arrayNode();
 		for (CallDataRecord cdr : callDataRecords) {
@@ -78,7 +82,7 @@ public class RuleMatch {
 			match.timestamp = null;
 		}
 		match.ruleId = jsonObject.get("ruleId") == null ? null : jsonObject.get("ruleId").asLong();
-		
+		match.imsi = jsonObject.get("imsi") == null ? null : jsonObject.get("imsi").asText();
 		JsonNode a = jsonObject.get("callDataRecords") == null ? null : jsonObject.get("callDataRecords");
 		
 		if (a != null && a.isArray()) {
@@ -97,6 +101,6 @@ public class RuleMatch {
 	}
 	
 	private boolean validate() {
-		return timestamp != null && ruleId != null && callDataRecords.size() > 0;
+		return timestamp != null && ruleId != null && callDataRecords.size() > 0 && imsi != null;
 	}
 }

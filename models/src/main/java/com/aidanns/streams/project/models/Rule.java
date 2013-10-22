@@ -3,7 +3,9 @@ package com.aidanns.streams.project.models;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 import javax.persistence.Basic;
@@ -57,18 +59,13 @@ public class Rule {
 	@Basic 
 	public Integer numberOfConstraintMatches;
 	
-	// Timestamps for individual matches against the constraint.
+	// Map from IMSI to Queue of Timestamps for individual matches against the constraint.
 	@Transient
-	private PriorityQueue<CallDataRecord> _matchedCDRs = new PriorityQueue<CallDataRecord>(10, new Comparator<CallDataRecord>() {
-		@Override
-		public int compare(CallDataRecord o1, CallDataRecord o2) {
-			return o1.releaseTime().compareTo(o2.releaseTime());
-		}
-	});
+	private Map<String, PriorityQueue<CallDataRecord>> _imsiToMatchedCDRsMap = new HashMap<String, PriorityQueue<CallDataRecord>>();
 	
-	// Whether the rule as a whole is currently matched for this window.
 	@Transient
-	private boolean _ruleIsMatched = false;
+	private Date _mostRecentTimestamp;
+	
 	
 	/**
 	 * Check whether the given date is out of the window.
@@ -81,53 +78,89 @@ public class Rule {
 	}
 	
 	/**
-	 * Offer a CallDataRecord to this rule, checking if it matches the constraint,
-	 * incrementing the number of matched CDRs if it does. Additionally, this method
-	 * moves the window so that it is ended by the release time of the current CDR,
-	 * discarding any matches that are now out of date.
+	 * Offer a CallDataRecord to this rule, checking if it matches the constraint.
+	 * 
+	 * If a match occurs, the CDR will be added to the list of matches within the current window
+	 * for that IMSI. The method will also adjust the current window forward if the cdr release time
+	 * is newer than the previous most recent and discard any CDR matches that are now expired. 
+	 * Note that the cdr may be immediately discarded if it has a release time prior to the
+	 * start of the current window.
+	 * 
 	 * @param cdr The CallDataRecord to check.
 	 * @return true if the CDR was matched by the constraint.
 	 */
 	public boolean offer(CallDataRecord cdr) {
-		// Remove any previous matches that are now out of date.
-		Date currentTimeStamp = cdr.releaseTime();
-		while (_matchedCDRs.peek() != null && dateIsOutOfWindow(_matchedCDRs.peek().releaseTime(), currentTimeStamp)) {
-			_matchedCDRs.poll();
-		}
+		// Ensure the most recent timestamp is not null.
+		_mostRecentTimestamp = _mostRecentTimestamp == null ? cdr.releaseTime() : _mostRecentTimestamp;
+		// Update the most recent timestamp if the CDR we just received is newer.
+		_mostRecentTimestamp = cdr.releaseTime().compareTo(_mostRecentTimestamp) > 0 ? cdr.releaseTime() : _mostRecentTimestamp;
 		
-		// Check the cdr against the constraint.
+		createQueueForIMSIIfNeeded(cdr.imsi());
 		
+		// Check the CDR against the constraint.
 		boolean matchedConstraint = this.constraint.matches(cdr);
 		if (matchedConstraint) {
-			_matchedCDRs.add(cdr);
+			_imsiToMatchedCDRsMap.get(cdr.imsi()).add(cdr);
 		}
 		
-		// If we've got enough matches for this window, set the rule to matched.
-		if (_matchedCDRs.size() >= numberOfConstraintMatches) {
-			_ruleIsMatched = true;
-		} else {
-			_ruleIsMatched = false;
-		}
+		removeExpiredMatchesForIMSI(cdr.imsi());
 		
 		return matchedConstraint;
 	}
 	
 	/**
+	 * Ensures that the queue of matches for a given imsi has been properly created.
+	 * 
+	 * The queues are created only on an as-needed basis.
+	 * 
+	 * @param imsi The imsi to check.
+	 */
+	private void createQueueForIMSIIfNeeded(String imsi) {
+		// Create the queue for the imsi if this is the first time we've seen it.
+		if (!_imsiToMatchedCDRsMap.containsKey(imsi)) {
+			_imsiToMatchedCDRsMap.put(imsi, new PriorityQueue<CallDataRecord>(10, new Comparator<CallDataRecord>() {
+				@Override
+				public int compare(CallDataRecord o1, CallDataRecord o2) {
+					return o1.releaseTime().compareTo(o2.releaseTime());
+				}
+			}));
+		}
+	}
+	
+	/**
+	 * Removes matches that are now expired as a result of the current window.
+	 * @param imsi The imsi to remove matches for.
+	 */
+	private void removeExpiredMatchesForIMSI(String imsi) {
+		createQueueForIMSIIfNeeded(imsi);
+		PriorityQueue<CallDataRecord> matchedCDRs = _imsiToMatchedCDRsMap.get(imsi);
+		// Remove any previous matches that are now out of date for the imsi we're interested in.
+		// Could potentially remove the CDR we just matched if it was from more than one window ago.
+		while (matchedCDRs.peek() != null && dateIsOutOfWindow(matchedCDRs.peek().releaseTime(), _mostRecentTimestamp)) {
+			matchedCDRs.poll();
+		}
+	}
+	
+	/**
 	 * Get a list of the CDRs that have been matched in the current window.
+	 * @param imsi The imsi to check for matches.
 	 * @return A list of CallDataRecords.
 	 */
 	@Transient
-	public List<CallDataRecord> matchedCallDataRecords() {
-		return new ArrayList<CallDataRecord>(_matchedCDRs);
+	public List<CallDataRecord> matchedCallDataRecords(String imsi) {
+		createQueueForIMSIIfNeeded(imsi);
+		return new ArrayList<CallDataRecord>(_imsiToMatchedCDRsMap.get(imsi));
 	}
 	
 	/**
 	 * Check whether the current window has enough constraint matches in it to consider the
-	 * whole rule to be matched.
+	 * whole rule to be matched for a given IMSI.
+	 * @param imsi The subscriber id to check the match for.
 	 * @return Whether the rule is matched.
 	 */
-	public boolean isMatched() {
-		return _ruleIsMatched;
+	public boolean isMatched(String imsi) {
+		createQueueForIMSIIfNeeded(imsi);
+		return _imsiToMatchedCDRsMap.get(imsi).size() >= numberOfConstraintMatches;
 	}
 	
 	/**
