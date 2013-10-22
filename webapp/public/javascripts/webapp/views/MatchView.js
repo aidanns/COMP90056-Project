@@ -15,6 +15,10 @@ define(function(require) {
 	    		'    <td><%= ruleId %></td>' +
 	    		'    <td><%= imsi %></td>'),
 	    		
+	    events: {
+	    	"click": "showDetailView"
+	    },
+	    		
 	    initialize: function() {
 	    	this.listenTo(this.model, "change", this.render);
 	    	this.listenTo(this.model, "destroy", this.remove);
@@ -23,6 +27,10 @@ define(function(require) {
 	    render: function() {
 	    	this.$el.html(this.template(this.model.toJSON()));
 	    	return this;
+	    },
+	    
+	    showDetailView: function() {
+	    	Backbone.history.navigate("matches/" + this.model.id, {trigger: true});
 	    }
 	    
 	});

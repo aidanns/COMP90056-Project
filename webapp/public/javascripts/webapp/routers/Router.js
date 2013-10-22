@@ -7,6 +7,7 @@ define(function(require) {
   var EditRuleView = require("webapp/views/EditRuleView");
   var Matches = require("webapp/collections/Matches");
   var MatchesView = require("webapp/views/MatchesView");
+  var MatchesDetailView = require("webapp/views/MatchesDetailView");
 
   return Backbone.Router.extend({
 	  
@@ -23,19 +24,17 @@ define(function(require) {
 		}, this);
 		
   	  this.rulesCollection = new Rules();
-	  this.rulesCollection.fetch();
-	  
 	  this.matchesCollection = new Matches();
-	  this.matchesCollection.fetch();
 	},
 	  
     // Mapping from route to the function that is called to execute that route.
     routes: {
       "": "home",
       "rules": "rules",
-      "edit/:id": "edit",
-      "add": "add",
-      "matches": "matches"
+      "rules/:id/edit": "edit",
+      "rules/add": "add",
+      "matches": "matches",
+      "matches/:id": "matchesDetail"
     },
 
     // When we execute the home route, print something to the console so we know it's working.
@@ -52,21 +51,23 @@ define(function(require) {
     },
     
     rules: function() {
-      console.log("Went to the rules route.");
-      this.rulesView = new RulesView({collection: this.rulesCollection}).render();
-      this.$el.append(this.rulesView.el);
+    	this.rulesCollection.fetch().done(_.bind(function() {
+			this.rulesView = new RulesView({collection: this.rulesCollection}).render();
+			this.$el.append(this.rulesView.el);
+    	}, this));
     },
     
     reset_rules: function() {
       if (this.rulesView) {
     	  this.rulesView.remove();
-    	  console.log("removing");
       }
     },
     
     matches: function() {
-    	this.matchesView = new MatchesView({collection: this.matchesCollection}).render();
-    	this.$el.append(this.matchesView.el);
+    	this.matchesCollection.fetch().done(_.bind(function() {
+	    	this.matchesView = new MatchesView({collection: this.matchesCollection}).render();
+	    	this.$el.append(this.matchesView.el);
+    	}, this));
     },
     
     reset_matches: function() {
@@ -75,11 +76,25 @@ define(function(require) {
     	}
     },
     
+    matchesDetail: function(id) {
+    	this.matchesCollection.fetch().done(_.bind(function() {
+    		this.matchesDetailView = new MatchesDetailView({model: this.matchesCollection.get(id)}).render();
+    		this.$el.append(this.matchesDetailView.el);
+    	}, this));
+    },
+    
+    reset_matchesDetail: function() {
+    	if (this.matchesDetailView) {
+    		this.matchesDetailView.remove();
+    	}
+    },
+    
     edit: function(id) {
-    	console.log("Went to the edit route.");
-    	this.editRuleView = new EditRuleView({model: this.rulesCollection.get(id)}).render();
-    	this.$el.append(this.editRuleView.el);
-    	this.editRuleView.getSaveDeferred().done(_.bind(function() {this.rulesCollection.fetch();}, this));
+    	this.rulesCollection.fetch().done(_.bind(function() {
+	    	this.editRuleView = new EditRuleView({model: this.rulesCollection.get(id)}).render();
+	    	this.$el.append(this.editRuleView.el);
+	    	this.editRuleView.getSaveDeferred().done(_.bind(function() {this.rulesCollection.fetch();}, this));
+    	}, this));
     },
     
     reset_edit: function() {
@@ -89,9 +104,11 @@ define(function(require) {
     },
     
     add: function() {
-    	this.addRuleView = new EditRuleView({model: new Rule()}).render();
-    	this.$el.append(this.addRuleView.el);
-    	this.addRuleView.getSaveDeferred().done(_.bind(function() {this.rulesCollection.fetch();}, this));
+    	this.rulesCollection.fetch().done(_.bind(function() {
+	    	this.addRuleView = new EditRuleView({model: new Rule()}).render();
+	    	this.$el.append(this.addRuleView.el);
+	    	this.addRuleView.getSaveDeferred().done(_.bind(function() {this.rulesCollection.fetch();}, this));
+    	}, this));
     },
     
     reset_add: function() {

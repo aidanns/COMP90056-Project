@@ -47,7 +47,7 @@ define(function(require) {
     },
     
     addRule: function() {
-    	Backbone.history.navigate("/add", {trigger: true});
+    	Backbone.history.navigate("/rules/add", {trigger: true});
     }
   });
 });

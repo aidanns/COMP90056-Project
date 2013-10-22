@@ -44,7 +44,7 @@ define(function(require) {
     },
     
     edit: function() {
-    	Backbone.history.navigate("/edit/" + this.model.id, {trigger: true});
+    	Backbone.history.navigate("/rules/" + this.model.id + "/edit", {trigger: true});
     }
   });
 });
