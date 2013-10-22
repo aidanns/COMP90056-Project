@@ -35,8 +35,10 @@ public class Project {
 				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream");
 		builder.setBolt("rule-match-uploader", new UploadMatchBolt(), 1)
 				.shuffleGrouping("rule-matcher", "RuleMatchStream");
+		builder.setBolt("statistics-uploader", new UploadStatisticsBolt(), 1)
+				.shuffleGrouping("statistics-gatherer", "StatisticsWindowStream");
 		
-		builder.setBolt("rule-change-printer", new DebuggingPrinterBolt(), 1)
+		builder.setBolt("debugging-printer", new DebuggingPrinterBolt(), 1)
 				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
 				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")

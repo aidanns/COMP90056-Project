@@ -14,6 +14,7 @@
         <class>com.aidanns.streams.project.models.StringEqualityConstraint</class>
         <class>com.aidanns.streams.project.models.RuleMatch</class>
         <class>com.aidanns.streams.project.models.CallDataRecord</class>
+        <class>com.aidanns.streams.project.models.StatisticsWindow</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.ImprovedH2Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create" />
