@@ -43,3 +43,7 @@ A Storm stream processing application that processes a stream of CDRs and matche
 To run the Storm application:
 
     $ cd streamapp && mvn compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=com.aidanns.streams.project.Project
+
+#### Configuration
+
+The rate of CDR generation by each spout may be limited by setting the `spout.cdr.rate.tuples_per_second` property in `conf/project.properties`.
