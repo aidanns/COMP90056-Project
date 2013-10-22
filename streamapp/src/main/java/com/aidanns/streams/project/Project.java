@@ -1,5 +1,7 @@
 package com.aidanns.streams.project;
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import backtype.storm.Config;
@@ -12,6 +14,8 @@ import backtype.storm.topology.TopologyBuilder;
  */
 public class Project {
 	
+	private static String PROJECT_PROPERTIES_FILE_NAME = "project.properties";
+	
 	/**
 	 * Start the application.
 	 * @param args The arguments to the app.
@@ -19,10 +23,26 @@ public class Project {
 	public static void main(String args[]) {
 		TopologyBuilder builder = new TopologyBuilder();
 		
+		Properties projectProperties = new Properties();
+		try {
+			projectProperties.load(Project.class.getClassLoader()
+					.getResourceAsStream(PROJECT_PROPERTIES_FILE_NAME));
+		} catch (Throwable e) {
+			Logger.getLogger(Project.class).error("Failed to open file specifying the rate for tuple generation from the Call Data Record spouts.");
+			System.exit(1);
+		}
+		
+		Integer cdrTupleRate = 0;
+		try {
+			 cdrTupleRate = Integer.parseInt(projectProperties.getProperty("spout.cdr.rate.tuples_per_second"));
+		} catch (NumberFormatException e) {
+			Logger.getLogger(Project.class).warn("Value for property key 'spout.cdr.rate.tuples_per_second' could not be parsed as a valid Integer. Call Data Record generation will not be throttled.");
+		}
+		
 		// Setup the spouts.
 		builder.setSpout("rule-spout", new RuleSpout(), 1);
-		builder.setSpout("cdr-spout-1", new CDRSpout("cdr_rawsample_1.txt"));
-		builder.setSpout("cdr-spout-2", new CDRSpout("cdr_rawsample_2.txt"));
+		builder.setSpout("cdr-spout-1", new CDRSpout("cdr_rawsample_1.txt", cdrTupleRate));
+		builder.setSpout("cdr-spout-2", new CDRSpout("cdr_rawsample_2.txt", cdrTupleRate));
 		
 		// Setup the bolts
 		builder.setBolt("statistics-gatherer", new StatisticsCalculationBolt(), 1)

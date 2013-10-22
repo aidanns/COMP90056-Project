@@ -34,7 +34,7 @@ public class DebuggingPrinterBolt extends BaseRichBolt {
 			logger.debug("Removing a Rule: " + input.getValue(0).toString());
 			break;
 		case "CallDataRecordStream":
-//			logger.debug("Processing a CDR: " + input.getValue(0).toString());
+			logger.debug("Processing a CDR: " + input.getValue(0).toString());
 			break;
 		case "RuleMatchStream":
 //			logger.debug("Match: " + ((RuleMatch)input.getValue(0)).toJson());

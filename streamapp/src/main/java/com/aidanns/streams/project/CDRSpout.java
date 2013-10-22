@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
@@ -21,6 +23,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import backtype.storm.utils.Utils;
 
 /**
  * Spout for call data records that reads them from a file.
@@ -52,19 +55,26 @@ public class CDRSpout extends BaseRichSpout {
 	// Parse the dates as per the format in the example data.
 	private SimpleDateFormat _dateParser = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 	
+	private Integer _maxTuplesPerSecond;
+	
+	private Queue<Date> _tupleEmitTimes;
+	
 	/**
 	 * Create a new CDRSpout.
 	 * @param fileName The csv file to read call data records from.
+	 * @param maxTuplesPerSecond The maximum number of tuples that will be emitted from this
+	 * spout per second. Negative values or 0 will be taken to be unlimited.
 	 */
-	public CDRSpout(String fileName) {
+	public CDRSpout(String fileName, Integer maxTuplesPerSecond) {
 		_fileName = fileName;
+		_maxTuplesPerSecond = maxTuplesPerSecond > 0 ? maxTuplesPerSecond : 0;
 	}
 	
 	@Override
 	public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context,
 			SpoutOutputCollector collector) {
 		_collector = collector;
-		
+		_tupleEmitTimes = new LinkedList<Date>();
 		try {
 			BufferedReader cdrFileReader = new BufferedReader(new InputStreamReader(
 					CDRSpout.class.getClassLoader().getResourceAsStream(_fileName)));
@@ -93,30 +103,40 @@ public class CDRSpout extends BaseRichSpout {
 			}).strategy(CSVStrategy.UK_DEFAULT).build();
 			
 		} catch (Throwable e) {
-			getLogger().error(getIOExcpetionString());
+			getLogger().error(getIOExceptionString());
 			System.exit(1);
 		}
 
 	}
 	
-	private String getIOExcpetionString() {
+	private String getIOExceptionString() {
 		return "Unable to open file " + _fileName
 				+ " in the 'input' directory to read call data records.";
 	}
-
+	
 	@Override
 	public void nextTuple() {
-		try {
-			CallDataRecord cdr = _csvCallDataRecordReader.readNext();
-			if (cdr != null) {
-				_collector.emit("CallDataRecordStream", new Values(cdr));
-			} else {
-				System.exit(0); // No more values to read, so end the program.
-			}
-		} catch (IOException e) {
-			getLogger().error(getIOExcpetionString());
-			System.exit(1);
+		while (_maxTuplesPerSecond > 0 && _tupleEmitTimes.size() > 0 && _tupleEmitTimes.peek().getTime() < new Date().getTime() - 1000) {
+			_tupleEmitTimes.poll();
 		}
+		
+		if (_maxTuplesPerSecond == 0 || _tupleEmitTimes.size() < _maxTuplesPerSecond) {
+			try {
+				CallDataRecord cdr = _csvCallDataRecordReader.readNext();
+				if (cdr != null) {
+					_collector.emit("CallDataRecordStream", new Values(cdr));
+					_tupleEmitTimes.add(new Date());
+				} else {
+					System.exit(0); // No more values to read, so end the program.
+				}
+			} catch (IOException e) {
+				getLogger().error(getIOExceptionString());
+				System.exit(1);
+			}
+		} else {
+			Utils.sleep(50);
+		}
+		
 	}
 
 	@Override
