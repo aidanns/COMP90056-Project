@@ -25,19 +25,24 @@ public class Project {
 		builder.setSpout("cdr-spout-2", new CDRSpout("cdr_rawsample_2.txt"));
 		
 		// Setup the bolts
+		builder.setBolt("statistics-gatherer", new StatisticsCalculationBolt(), 1)
+				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
+				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream");
 		builder.setBolt("rule-matcher", new RuleMatchingBolt(), 1)
 				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
 				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
 				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream");
+		builder.setBolt("rule-match-uploader", new UploadMatchBolt(), 1)
+				.shuffleGrouping("rule-matcher", "RuleMatchStream");
+		
 		builder.setBolt("rule-change-printer", new DebuggingPrinterBolt(), 1)
 				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
 				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
 				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream")
-				.shuffleGrouping("rule-matcher", "RuleMatchStream");
-		builder.setBolt("rule-match-uploader", new UploadMatchBolt(), 1)
-				.shuffleGrouping("rule-matcher", "RuleMatchStream");
+				.shuffleGrouping("rule-matcher", "RuleMatchStream")
+				.shuffleGrouping("statistics-gatherer", "StatisticsWindowStream");
 		
 		// Start the job.
 		Config conf = new Config();

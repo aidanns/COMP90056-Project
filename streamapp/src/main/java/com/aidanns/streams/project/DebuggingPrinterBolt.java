@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.aidanns.streams.project.models.RuleMatch;
+import com.aidanns.streams.project.models.StatisticsWindow;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -23,18 +23,25 @@ public class DebuggingPrinterBolt extends BaseRichBolt {
 			OutputCollector collector) {}
 
 	public void execute(Tuple input) {
+		
+		Logger logger = Logger.getLogger(DebuggingPrinterBolt.class);
+		
 		switch (input.getSourceStreamId()) {
 		case "UpdatedRulesStream":
-			Logger.getLogger(DebuggingPrinterBolt.class).debug("Updating a Rule: " + input.getValue(0).toString());
+			logger.debug("Updating a Rule: " + input.getValue(0).toString());
 			break;
 		case "RemovedRuleIdsStream":
-			Logger.getLogger(DebuggingPrinterBolt.class).debug("Removing a Rule: " + input.getValue(0).toString());
+			logger.debug("Removing a Rule: " + input.getValue(0).toString());
 			break;
 		case "CallDataRecordStream":
-//			Logger.getLogger(DebuggingPrinterBolt.class).debug("Processing a CDR: " + input.getValue(0).toString());
+//			logger.debug("Processing a CDR: " + input.getValue(0).toString());
 			break;
 		case "RuleMatchStream":
-//			Logger.getLogger(DebuggingPrinterBolt.class).debug("Match: " + ((RuleMatch)input.getValue(0)).toJson());
+//			logger.debug("Match: " + ((RuleMatch)input.getValue(0)).toJson());
+			break;
+		case "StatisticsWindowStream":
+			logger.debug("Stats: " + ((StatisticsWindow) input.getValueByField("Statistics")).toJson());
+			break;
 		}
 	}
 
