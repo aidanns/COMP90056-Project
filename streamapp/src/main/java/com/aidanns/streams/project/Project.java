@@ -56,12 +56,12 @@ public class Project {
 		builder.setBolt("statistics-uploader", new UploadStatisticsBolt(), 1)
 				.shuffleGrouping("statistics-gatherer", "StatisticsWindowStream");
 		
-		builder.setBolt("debugging-printer", new DebuggingPrinterBolt(), 1)
-				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
-				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
-				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
-				.shuffleGrouping("rule-matcher", "RuleMatchStream")
-				.shuffleGrouping("statistics-gatherer", "StatisticsWindowStream");
+//		builder.setBolt("debugging-printer", new DebuggingPrinterBolt(), 1)
+//				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
+//				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
+//				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
+//				.shuffleGrouping("rule-matcher", "RuleMatchStream")
+//				.shuffleGrouping("statistics-gatherer", "StatisticsWindowStream");
 		
 		// Start the job.
 		Config conf = new Config();
