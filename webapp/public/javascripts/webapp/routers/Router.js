@@ -8,6 +8,8 @@ define(function(require) {
   var Matches = require("webapp/collections/Matches");
   var MatchesView = require("webapp/views/MatchesView");
   var MatchesDetailView = require("webapp/views/MatchesDetailView");
+  var StatisticsView = require("webapp/views/StatisticsView");
+  var Statistics = require("webapp/collections/Statistics")
 
   return Backbone.Router.extend({
 	  
@@ -25,6 +27,13 @@ define(function(require) {
 		
   	  this.rulesCollection = new Rules();
 	  this.matchesCollection = new Matches();
+	  this.statisticsCollection = new Statistics();
+	  
+	  window.setInterval(_.bind(function() {
+		  this.rulesCollection.fetch();
+		  this.matchesCollection.fetch();
+		  this.statisticsCollection.fetch();
+	  }, this), 10000);
 	},
 	  
     // Mapping from route to the function that is called to execute that route.
@@ -34,7 +43,8 @@ define(function(require) {
       "rules/:id/edit": "edit",
       "rules/add": "add",
       "matches": "matches",
-      "matches/:id": "matchesDetail"
+      "matches/:id": "matchesDetail",
+      "statistics": "stats"
     },
 
     // When we execute the home route, print something to the console so we know it's working.
@@ -115,6 +125,20 @@ define(function(require) {
     	if (this.addRuleView) {
     		this.addRuleView.remove();
     	}
+    },
+    
+    stats: function() {
+    	this.statisticsCollection.fetch().done(_.bind(function() {
+    		this.statisticsView = new StatisticsView({collection: this.statisticsCollection}).render();
+    		this.$el.append(this.statisticsView.el);
+    	}, this));
+    },
+    
+    reset_stats: function() {
+    	if (this.statisticsView) {
+    		this.statisticsView.remove();
+    	}
     }
+    
   });
 });
