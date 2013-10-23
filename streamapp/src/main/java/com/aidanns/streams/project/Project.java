@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.tuple.Fields;
 
 /**
  * Logic that starts the program.
@@ -42,17 +43,14 @@ public class Project {
 		// Setup the spouts.
 		builder.setSpout("rule-spout", new RuleSpout(), 1);
 		builder.setSpout("cdr-spout-1", new CDRSpout("cdr_rawsample_1.txt", cdrTupleRate));
-		builder.setSpout("cdr-spout-2", new CDRSpout("cdr_rawsample_2.txt", cdrTupleRate));
 		
 		// Setup the bolts
 		builder.setBolt("statistics-gatherer", new StatisticsCalculationBolt(), 1)
-				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
-				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream");
-		builder.setBolt("rule-matcher", new RuleMatchingBolt(), 1)
+				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream");
+		builder.setBolt("rule-matcher", new RuleMatchingBolt(), 5)
 				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
-				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
-				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream");
+				.fieldsGrouping("cdr-spout-1", "CallDataRecordStream", new Fields("IMSI"));
 		builder.setBolt("rule-match-uploader", new UploadMatchBolt(), 1)
 				.shuffleGrouping("rule-matcher", "RuleMatchStream");
 		builder.setBolt("statistics-uploader", new UploadStatisticsBolt(), 1)
@@ -62,7 +60,6 @@ public class Project {
 				.shuffleGrouping("rule-spout", "UpdatedRulesStream")
 				.shuffleGrouping("rule-spout", "RemovedRuleIdsStream")
 				.shuffleGrouping("cdr-spout-1", "CallDataRecordStream")
-				.shuffleGrouping("cdr-spout-2", "CallDataRecordStream")
 				.shuffleGrouping("rule-matcher", "RuleMatchStream")
 				.shuffleGrouping("statistics-gatherer", "StatisticsWindowStream");
 		
@@ -74,7 +71,7 @@ public class Project {
 		cluster.submitTopology("project", conf, builder.createTopology());
 		
 		try {
-			Thread.sleep(300 * 1000); // Set the runtime for the app in ms.
+			Thread.sleep(600 * 1000); // Set the runtime for the app in ms.
 		} catch (InterruptedException e) {
 			Logger.getLogger(Project.class).error("Interrupted while"
 					+ " waiting for local cluster to complete processing.");

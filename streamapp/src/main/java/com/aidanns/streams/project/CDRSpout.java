@@ -124,7 +124,7 @@ public class CDRSpout extends BaseRichSpout {
 			try {
 				CallDataRecord cdr = _csvCallDataRecordReader.readNext();
 				if (cdr != null) {
-					_collector.emit("CallDataRecordStream", new Values(cdr));
+					_collector.emit("CallDataRecordStream", new Values(cdr, cdr.imsi()));
 					_tupleEmitTimes.add(new Date());
 				} else {
 					System.exit(0); // No more values to read, so end the program.
@@ -141,7 +141,7 @@ public class CDRSpout extends BaseRichSpout {
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declareStream("CallDataRecordStream", new Fields("CallDataRecord"));
+		declarer.declareStream("CallDataRecordStream", new Fields("CallDataRecord", "IMSI"));
 
 	}
 
