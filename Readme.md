@@ -9,9 +9,8 @@ Aidan Nagorcka-Smith (aidann@student.unimelb.edu.au)
 1. Install `vagrant` for your system from http://downloads.vagrantup.com/
 2. Install `virtualbox` for your system from https://www.virtualbox.org/
 3. `$ vagrant up` from the root of the project to build and start a virtual machine running the applications.
-4. `$ vagrant ssh` to access the shell of the virtual machine.
-5. `$ /vagrant/bin/start_webapp.sh` to start the webapp.
-6. `$ /vagrant/bin/start_streamapp.sh` to start the streamapp.
+4. `$ vagrant ssh -c "/vagrant/bin/start_webapp.sh"` to start the webapp.
+5. `$ vagrant ssh -c "/vagrant/bin/start_streamapp.sh"` to start the streamapp.
 
 You should then be able to interact with the web-application on `http://192.168.33.10:9000`.
 

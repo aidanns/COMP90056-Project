@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Provision the box using a shell script.
   config.vm.provision "shell", path: "vagrant_provision_root.sh"
-  config.vm.provision "shell", path: "vagrant_provision_root.sh"
+  config.vm.provision "shell", privileged: false, path: "vagrant_provision.sh"
 
   # Create a host-only network to the vagrant instance.
   config.vm.network :private_network, ip: "192.168.33.10"
