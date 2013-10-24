@@ -13,7 +13,7 @@ Aidan Nagorcka-Smith (aidann@student.unimelb.edu.au)
 5. `$ /vagrant/bin/start_webapp.sh` to start the webapp.
 6. `$ /vagrant/bin/start_streamapp.sh` to start the streamapp.
 
-You should then be able to interact with the web-application on `http://vm-ip-address:9000`.
+You should then be able to interact with the web-application on `http://192.168.33.10:9000`.
 
 ## Overview
 
