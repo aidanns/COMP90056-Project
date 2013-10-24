@@ -42,13 +42,13 @@ public class UploadMatchBolt extends BaseRichBolt {
 		StringEntity body = new StringEntity(((RuleMatch)input.getValueByField("match")).toJson().toString(), ContentType.create("application/json", "UTF-8"));
 		httpPost.setEntity(body);
 		try {
-			Logger.getLogger(UploadMatchBolt.class).debug(httpClient.execute(httpPost, new ResponseHandler<String>() {
+			httpClient.execute(httpPost, new ResponseHandler<String>() {
 				@Override
 				public String handleResponse(final HttpResponse response)
 						throws ClientProtocolException, IOException {
 					return response.toString();
 				}
-			}));
+			});
 		} catch (ClientProtocolException e) {
 			Logger.getLogger(UploadMatchBolt.class).error("Error while uploading a match to the REST API.");
 		} catch (IOException e) {

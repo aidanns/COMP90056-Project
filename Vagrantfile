@@ -10,9 +10,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 
   # Provision the box using a shell script.
-  config.vm.provision "shell", path: "vagrant_provision.sh"
+  config.vm.provision "shell", path: "vagrant_provision_root.sh"
+  config.vm.provision "shell", path: "vagrant_provision_root.sh"
 
   # Create a host-only network to the vagrant instance.
   config.vm.network :private_network, ip: "192.168.33.10"
+
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--memory", "2048"]
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
+    v.customize ["modifyvm", :id, "--cpus", "1"]
+  end
 
 end

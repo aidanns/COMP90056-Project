@@ -7,8 +7,11 @@ Aidan Nagorcka-Smith (aidann@student.unimelb.edu.au)
 ## Running the whole project
 
 1. Install `vagrant` for your system from http://downloads.vagrantup.com/
-3. Install `virtualbox` for your system from https://www.virtualbox.org/
-4. `vagrant up` from the root of the project to build and start a virtual machine running the applications.
+2. Install `virtualbox` for your system from https://www.virtualbox.org/
+3. `$ vagrant up` from the root of the project to build and start a virtual machine running the applications.
+4. `$ vagrant ssh` to access the shell of the virtual machine.
+5. `$ /vagrant/bin/start_webapp.sh` to start the webapp.
+6. `$ /vagrant/bin/start_streamapp.sh` to start the streamapp.
 
 You should then be able to interact with the web-application on `http://vm-ip-address:9000`.
 
@@ -32,9 +35,13 @@ The Backbone web application allows for CRUD operations on rules from a web-base
 
 The API allows for CRUD operations on JSON representations of `Rule` objects (Java representations defined in `cdr-models`). The current set of `Rule`s are saved in an in-memory database and wiped each time the application is restarted.
 
-To run the Play! application:
+To run the Play! application in debug mode:
 
-    $ cd webapp && play start
+    $ cd webapp && play run
+
+To run the Play! application in production mode:
+
+    $ cd webapp && play clean compile stage && target/universal/stage/bin/cdr-webapp
 
 ### cdr-streamapp
 
@@ -46,4 +53,4 @@ To run the Storm application:
 
 #### Configuration
 
-The rate of CDR generation by each spout may be limited by setting the `spout.cdr.rate.tuples_per_second` property in `conf/project.properties`.
+The rate of CDR generation by the spout may be limited by setting the `spout.cdr.rate.tuples_per_second` property in `conf/project.properties`.
