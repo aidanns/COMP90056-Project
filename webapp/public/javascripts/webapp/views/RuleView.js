@@ -20,9 +20,10 @@ define(function(require) {
     		'<td> <%= name %> </td>' +
     		'<td> <%= windowSize %> </td>' +
     		'<td> <%= numberOfConstraintMatches %> </td>' +
-    		'<td class="active"> <%= active %> </td>' +
+    		'<td> <%= active %> </td>' +
     		'<td><button class="remove">Remove</button></td>' +
-    		'<td><button class="edit">Edit</button></td>'),
+    		'<td><button class="edit">Edit</button></td>' +
+    		'<td><button class="active"">Toggle Active</button></td>'),
     
     initialize: function(options) {
     	this.listenTo(this.model, "change", this.render);

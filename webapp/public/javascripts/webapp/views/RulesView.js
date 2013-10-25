@@ -16,6 +16,7 @@ define(function(require) {
     		'    <th>Rule Active?</th>' +
     		'    <th></th>' +
     		'    <th></th>' +
+    		'    <th></th>' +
     		'  </tr>' +
     		'</table>' +
     		'<button class="addRule">Add Rule</button>'),
