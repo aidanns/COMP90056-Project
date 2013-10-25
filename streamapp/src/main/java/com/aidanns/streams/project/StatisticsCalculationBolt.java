@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.aidanns.streams.project.models.CallDataRecord;
 import com.aidanns.streams.project.models.CallDataRecord.CauseForTermination;
 import com.aidanns.streams.project.models.StatisticsWindow;
