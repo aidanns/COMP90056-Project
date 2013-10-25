@@ -12,6 +12,7 @@ define(function(require) {
 	    		'    <th>Timestamp</th>' +
 	    		'    <th>Rule #</th>' +
 	    		'    <th>IMSI</th>' +
+	    		'    <th></th>' +
 	    		'  </tr>' +
 	    		'</table>'),
 	    		

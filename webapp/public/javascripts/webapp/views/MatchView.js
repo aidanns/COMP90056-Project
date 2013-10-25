@@ -13,10 +13,11 @@ define(function(require) {
 	    		'    <td><%= id %></td>' +
 	    		'    <td><%= timestamp %></td>' +
 	    		'    <td><%= ruleId %></td>' +
-	    		'    <td><%= imsi %></td>'),
+	    		'    <td><%= imsi %></td>' +
+	    		'    <td><button class="detail">Show Detail</button></td>'),
 	    		
 	    events: {
-	    	"click": "showDetailView"
+	    	"click .detail": "showDetailView"
 	    },
 	    		
 	    initialize: function() {
