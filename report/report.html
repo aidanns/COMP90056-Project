@@ -1,0 +1,744 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      text-align: left;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      text-align: left;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Stream Processing and Applications Project</title>
+
+</head>
+<body>
+<h1>Stream Processing and Applications Project</h1>
+
+<p><strong>Author:</strong> Aidan Nagorcka-Smith<br>
+<strong>Student ID:</strong> 316748<br>
+<strong>Email:</strong> aidann@student.unimelb.edu.au</p>
+
+<h2>Project Overview</h2>
+
+<p>This project allows matching user-determined rules against a stream of Call Data Records (CDRs). The rules are defined using a web interface and stored in an in-memory database via a REST API. The stream processing application reads the rules from the REST API and a stream of CDRs from file, checking for rule matches and uploading their details back to the REST API, from where they can be viewed in the web application. Additionally, the stream application calculates statistics about the stream and uploads these data points to the REST API. Statistics can also be viewed using the web application.</p>
+
+<h2>Implementation Details</h2>
+
+<h3>REST API</h3>
+
+<h4>Overview</h4>
+
+<p>The REST API is implemented using the Play! Java framework and is contained in the <code>webapp</code> subdirectory of the project.</p>
+
+<p>HTTP routes are expressed in <code>webapp/conf/routes</code>, mapping HTTP endpoints to the controller and method combination that implement them. Java controllers are implemented in the <code>webapp/app/controllers</code> directory. The Play! application uses <code>hibernate</code> to persist objects to an in-memory database. The database is cleared when the application is started.</p>
+
+<p>The core Java data-structures are shared with the strem application and are implemented in a separate maven-based project, stored in the <code>cdr-models</code> subdirectory of the project.</p>
+
+<p>A REST API was chosen as the central point for the project as it's a standard and straight-forward to implement way to present data resources to a GUI of any type and the stream processing application itself. JSON is a straightforward and universally accepted data interchange format.</p>
+
+<h4>Endpoints</h4>
+
+<p>Each endpoint resource (denoted below with the placeholder <code>$ENDPOINT</code>) type exposes the following operations, accepting parameters and returning results as JSON:</p>
+
+<ul>
+<li><code>GET /api/$ENDPOINT</code>: Returns an array containing all current instances of that resource type.</li>
+<li><code>GET /api/$ENDPOINT/$ID</code>: Returns a specific instance of that resource with id <code>$ID</code>.
+<code>POST /api/$ENDPOINT</code>: Accepts a JSON representation of a new instance of that resource and stores it in the database.</li>
+<li><code>PUT /api/$ENDPOINT/$ID</code>: Accepts a JSON representation of that resource and updates the instance with id <code>$ID</code> to have the same values as that resource.</li>
+<li><code>DELETE /api/$ENDPOINT/$ID</code>: Removes the instance of the resource with id <code>$ID</code> from the database.</li>
+</ul>
+
+
+<p>The REST API exposes the following end-points:</p>
+
+<ul>
+<li><code>Rule</code></li>
+<li><code>Match</code></li>
+<li><code>Statistics</code></li>
+</ul>
+
+
+<h4>Resource Structure</h4>
+
+<p>The following resources are exposed by the REST API.</p>
+
+<p>In the resource data formats <code>number</code>, <code>string</code> and <code>boolean</code> are standard JSON data-types, while <code>[]</code> represents arrays and <code>{}</code> represents objects:</p>
+
+<h5>Rule</h5>
+
+<p>Represents a CDR matching rule which can be created by the user of the web application.</p>
+
+<pre><code>{
+    id: number,
+    name: string,
+    active: boolean,
+    windowSize: number,
+    numberOfConstraintMatches: number,
+    constraint: Constraint
+}
+</code></pre>
+
+<h5>Constraint</h5>
+
+<p>A tree structure which allows CDR matching criteria to be expressed.</p>
+
+<p>One of the following:</p>
+
+<p>Evaluates to true if the contents of a given field in the CDR is equal to the specified string.</p>
+
+<pre><code>{
+    type: "stringEquality",
+    field: FieldName,
+    value: string
+}
+</code></pre>
+
+<p>Evaluates to true if either of the child constraints is true.</p>
+
+<pre><code>{
+    type: "or",
+    firstChild: Constraint,
+    secondChild: Constraint
+}
+</code></pre>
+
+<p>Evaluates to true if both of the child constraints are true.</p>
+
+<pre><code>{
+    type: "and",
+    firstChild: Constraint,
+    secondChild: Constraint
+}
+</code></pre>
+
+<h5>FieldName</h5>
+
+<p>One of the field names from the CDR specification.</p>
+
+<p>One of the following:</p>
+
+<ul>
+<li><code>"CDRType"</code></li>
+<li><code>"IMSI"</code></li>
+<li><code>"IMEI"</code></li>
+<li><code>"CallingNumber"</code></li>
+<li><code>"CalledNumber"</code></li>
+<li><code>"RecordingEntity"</code></li>
+<li><code>"Location"</code></li>
+<li><code>"CallReference"</code></li>
+<li><code>"CallDuration"</code></li>
+<li><code>"AnswerTime"</code></li>
+<li><code>"SeizureTime"</code></li>
+<li><code>"ReleaseTime"</code></li>
+<li><code>"CauseForTermination"</code></li>
+<li><code>"BasicService"</code></li>
+<li><code>"MSCAddress"</code></li>
+</ul>
+
+
+<h5>Match</h5>
+
+<p>Represents an individual match of a rule.</p>
+
+<pre><code>{
+    timestamp: string,
+    ruleId: number,
+    imsi: string,
+    id: number,
+    callDataRecords: [CallDataRecord]
+}
+</code></pre>
+
+<h5>CallDataRecord</h5>
+
+<p>Represents an individual call data record.</p>
+
+<pre><code>{
+    cdrType: string,
+    imsi: string,
+    imei: string,
+    callingNumber: string,
+    calledNumber: string,
+    recordingEntity: string,
+    location: string,
+    callReference: string,
+    callDuration: number,
+    answerTime: string,
+    seizureTime: string,
+    releaseTime: string,
+    causeForTermination: string,
+    basicService: string,
+    mscAddress: string
+}
+</code></pre>
+
+<h5>Statistics</h5>
+
+<p>Represents statistics collected from the CDR stream for a one minute tumbling window.</p>
+
+<pre><code>{
+    id: number,
+    windowSize: number,
+    averageCallDuration: number,
+    callVolume: number,
+    droppedCallVolume: number,
+    timestamp: string
+}
+</code></pre>
+
+<h3>Web Application</h3>
+
+<h4>Overview</h4>
+
+<p>The web application is implemented using <code>Backbone.js</code> and served from the root of the Play! application that provides the REST API. The files for the application can be found in the <code>webapp/public/javascripts</code> subdirectory of the project.</p>
+
+<p>A client-side Javascript application was chosen as it fits natually with a JSON based REST API and ensures a clean separation between the API itself and the code responsible for acting as the user interface.</p>
+
+<h4>Pages</h4>
+
+<p>The web application is made up of 6 main pages:</p>
+
+<h5>Home</h5>
+
+<p>The home page is accessible from the at the root of the application and displays buttons which present the <code>rules</code>, <code>matches</code> and <code>statistics</code> pages.</p>
+
+<p><img src="home.png"></p>
+
+<h5>Rules</h5>
+
+<p>The <code>rules</code> page lists all the rules that are currently stored in the database. Each rule can be deleted or toggled on or off from this page. Clicking on the "Add Rule" button will present the <code>add-rule</code> page, while clicking the "Edit" buttonf or a rule will display the <code>edit-rule</code> page for that rule.</p>
+
+<p><img src="rules.png"></p>
+
+<h5>Add-Rule</h5>
+
+<p>The <code>add-rule</code> page allows for a new rule to be added to the system. It allows the user to set the following properties of a rule:</p>
+
+<ul>
+<li><strong>Name:</strong> A human-readable representation for the rule.</li>
+<li><strong>Window Size:</strong> The number of seconds of data to use as a sliding window for evaluating this rule.</li>
+<li><strong># Constraint Matches:</strong> The number of times the constraint for this rule needs to be matched in a given window for the rule to be considered matched.</li>
+<li><strong>Constraint:</strong> The constraint that each CDR will be checked against to see if it will contribute to a match for this rule.</li>
+</ul>
+
+
+<p>Clicking the "Save" button will save the rule in it's current state to the database. Clicking cancel will return the user to the list of all rules. All rules default to enabled when saved.</p>
+
+<h5>Edit-Rule</h5>
+
+<p>The <code>edit-rule</code> page allows for the same functionality as the <code>add-rule</code> page, but it pre-populated with the data for a given rule and will over-write that data on save.</p>
+
+<p><img src="edit_rule.png"></p>
+
+<h5>Matches</h5>
+
+<p>The <code>matches</code> page lists all the rule matches that have been recorded so far by the stream processing page. Clicking the "Show Detail" button for a given match will display the <code>match-detail</code> page for that match.</p>
+
+<p><img src="match.png"></p>
+
+<h5>Match-Detail</h5>
+
+<p>The <code>match-detail</code> page displays all the details of a match, including the CDRs that contributed to it.</p>
+
+<p><img src="match_detail.png"></p>
+
+<h5>Statistics</h5>
+
+<p>The <code>statistics</code> page displays statistics for call volume, dropped call volume and average call length recorded across all processed CDRs. Statistics are separated in to 1 minute buckets and displayed once the entire minute has been processed by the stream processing application.</p>
+
+<p><img src="statistics.png"></p>
+
+<h3>Stream Application</h3>
+
+<h4>Overview</h4>
+
+<p>The stream processing application is implemented using the <code>Storm</code> framework and built using mave. It is stored in the <code>streamapp</code> subdirectory of the project.</p>
+
+<p>Storm was chosen because of my familiarity with Java and the extensive tooling available for the development environment. Additionally, it allows for the sharing of the models between both the Stream processing application and the Play! application that powers the REST API.</p>
+
+<h4>Flow Graph</h4>
+
+<p>The following diagram shows the flow of data through the stream processing application.</p>
+
+<p><img src="stream_flow.png"></p>
+
+<h4>Components</h4>
+
+<h5>RuleSpout</h5>
+
+<p>The <code>RuleSpout</code> polls the rules that are stored on the server and emits two streams, one of updated rules and one of removed rules ids.</p>
+
+<p>Output:</p>
+
+<p><code>UpdatedRulesStream</code></p>
+
+<pre><code>{
+    rule: com.aidanns.streams.project.Rule
+}
+</code></pre>
+
+<p><code>RemovedRuleIdsStream</code></p>
+
+<pre><code>{
+    id: Long
+}
+</code></pre>
+
+<h5>CDRSpout</h5>
+
+<p>The <code>CDRSpout</code> reads lines from a file containing CDRs and parses them, emitting one at a time in a stream of CDRs. The IMSI is emitted as a separate field on the same tuple to allow storm to automatically partition the stream based on this field.</p>
+
+<p>Output:</p>
+
+<p><code>CallDataRecordStream</code></p>
+
+<pre><code>{
+    CallDataRecord: com.aidanns.streams.project.CallDataRecord
+    IMSI: String
+}
+</code></pre>
+
+<h5>RuleMatchingBolt</h5>
+
+<p>Each <code>RuleMatchingBolt</code> is responsible for checking each CDR it processes against every rule currently in the system. When a CDR can potentially contribute to a rule match, it is stored using a priority queue based on the release time of the call it represents until it's window expires, when it is discarded. If a match is detected, a match tuple is emitted from the bolt. The bolt is designed to scale horizontally by partitioning the stream based on <code>IMSI</code>, which identifies an individual user.</p>
+
+<p>Horizontal scaling was chosen as it is a simple and automatable way to add additional bolts to the application. Partitioning a stream based on a single field is an easy to understand and easy to implement method of load balancing.</p>
+
+<p>Input:</p>
+
+<p><code>UpdatedRulesStream</code></p>
+
+<pre><code>{
+    rule: com.aidanns.streams.project.Rule
+}
+</code></pre>
+
+<p><code>RemovedRuleIdsStream</code></p>
+
+<pre><code>{
+    id: Long
+}
+</code></pre>
+
+<p><code>CallDataRecordStream</code></p>
+
+<pre><code>{
+    CallDataRecord: com.aidanns.streams.project.CallDataRecord
+    IMSI: String
+}
+</code></pre>
+
+<p>Output:</p>
+
+<p><code>RuleMatchStream</code></p>
+
+<pre><code>{
+    match: com.aidanns.streams.project.RuleMatch
+}
+</code></pre>
+
+<h5>StatisticsCalculationBolt</h5>
+
+<p>The <code>StatisticsCalculationBolt</code> stores aggregated statistics for a CDR stream and outputs a summary for every 1 minute of CDRs that are processed.</p>
+
+<p>Input:</p>
+
+<p><code>CallDataRecordStream</code></p>
+
+<pre><code>{
+    CallDataRecord: com.aidanns.streams.project.CallDataRecord
+    IMSI: String
+}
+</code></pre>
+
+<p>Output:</p>
+
+<p><code>StatisticsWindowStream</code></p>
+
+<pre><code>{
+    Statistics: com.aidanns.streams.project.StatisticsWindow
+}
+</code></pre>
+
+<h5>UploadMatchBolt</h5>
+
+<p>The <code>UploadMatchBolt</code> does a <code>HTTP POST</code> to the <code>api/match</code> endpoint of the REST API for each match.</p>
+
+<p>Input:</p>
+
+<p><code>RuleMatchStream</code></p>
+
+<pre><code>{
+    match: com.aidanns.streams.project.RuleMatch
+}        
+</code></pre>
+
+<h5>UploadStatisticsBolt</h5>
+
+<p>The <code>UploadStatisticsBolt</code> does a <code>HTTP POST</code> to the <code>/api/statistics</code> endpoint of the REST API for each statistics window.</p>
+
+<p>Input:</p>
+
+<p><code>StatisticsWindowStream</code></p>
+
+<pre><code>{
+    Statistics: com.aidanns.streams.project.StatisticsWindow
+}
+</code></pre>
+
+<h2>Performance Evaluation</h2>
+
+<h3>Latency</h3>
+
+<p>The CDR generation at the spout was limited to varies levels and the average latency between tuple emission from the spout and evaluation by the <code>RuleMatchingBolt</code> over a 30 second run of the application was measured. The measurement was done 5 times for each generation rate.</p>
+
+<p>The test was conducted on a Macbook Air with a 2.0 Ghz Intel Core i7 CPU, 8GB 1600 MHz DDR3 RAM and a SSD. The test maching was under no other significant load at the time of testing. During the test the application was configured with a single <code>CDRSpout</code> and one <code>RuleMatchingBolt</code>.</p>
+
+<p>Note that one anomylous reading of 10 seconds was ommitted from the graph for a generation rate of 10 tuples per second.</p>
+
+<p><img src="spout_cdr_generation_vs_latency.png"></p>
+
+<p>Higher throughput rates were generally associated with a lower average latency. One possible explenation of this is that the first tuples run through the application have a particularly high latency, perhaps due to being processed while the appliation is still initialising. It is also possible that context switching away from the running application happens at very low throughputs and this incurs a higher cost when the time comes to process a tuple.</p>
+
+<h3>Throughput</h3>
+
+<h4># Rules</h4>
+
+<p>Total tuple throughput in a 30 second run of the application was measured with varying number of rules being evaluated. The measurement was done once at each level of rules.</p>
+
+<p>The test was conducted on a Macbook Air with a 2.0 Ghz Intel Core i7 CPU, 8GB 1600 MHz DDR3 RAM and a SSD. The test maching was under no other significant load at the time of testing. During the test the application was configured with a single <code>CDRSpout</code>, one <code>RuleMatchingBolt</code> and a single rule which was not matched during the run of the application.</p>
+
+<p><img src="num_rules_vs_throughput.png"></p>
+
+<p>An increase in the number of rules being tested generally resulted in a lower throughput. This was to be expected - more computational cost for each CDR means less CDRs will be evaluated in the same ammount of time.</p>
+
+<h4># Rule Evaluators</h4>
+
+<p>Total tuple throughput in a 30 second run of the application was measured while varying the number of CPUs and rule evaluators assigned to the stream application. The measurement was done once for each {# Rule Evaluators X # CPUs} pair.</p>
+
+<p>The test was conducted using VirtualBox virtual machines running Ubuntu 12.04 on a Macbook Air with a 2.0 Ghz Intel Core i7 CPU, 8GB 1600 MHz DDR3 RAM and a SSD. Each virtual machine was assigned 2GB of ram, with a CPU equivalent to a maximum of 50% of a single core from the underlying Intel processor. Neither the test maching or the virtual machines were under any other significant load at the time of testing.</p>
+
+<p><img src="num_rule_evaluators_vs_throughput.png"></p>
+
+<p>The increase in throughput was significant, although less than linear as extra CPUs were added to the processing pool for the stream application. The smaller difference between two and three processors was likely due to the fact that the three processors were being simulated on two underlying cores, meaning the results are not representative of a true multi-processor system.</p>
+
+<p>An increase in the number of rule processors did not have a significant impact on the throughput of CDRs. This indicates that either there is already sufficient parallelism obtained from the number of spouts / bolts running in the application, or that there is some other bottleneck in the system (for instance the CDR generation).</p>
+
+<h2>Proposed Future Configuration &amp; Work</h2>
+
+<p>There is a variety of improvements that could be made to the software:</p>
+
+<h3>Scalability</h3>
+
+<ul>
+<li>Spread rules out over multiple bolts in addition to partitioning the stream based on IMSI.</li>
+<li>Not creating an empty queue of matches for each {Rule X ISMI} pair considered until there is at least one CDR for that IMSI that matches the constraint for that rule.</li>
+<li>More aggressive pruning of stored CDRs as their window expires.</li>
+<li>Storing CDRs that are potential matches in a database rather than in-process, which is prohibitively memory intensive where there are rules that have constraints that match many CDRs, while the rule in itself may not match. (eg. "X person made Y phone calls in Z window")</li>
+<li>Relax the requirement for returning all CDRs that contributed to a match to reduce memory usage and allow for sampling the stream.</li>
+<li>Improve data representation to be more space efficient in the CallDataRecord by converting from Strings to other datatypes where possible.</li>
+</ul>
+
+
+<h3>Features</h3>
+
+<ul>
+<li>Add more types of constraints. (eg. number comparison operators, date ranges, day of the week, time of day ranges, etc)</li>
+</ul>
+
+
+<h3>Usability</h3>
+
+<ul>
+<li>Improve the navigation of the web application.</li>
+<li>Add proper visualisations to the web application.</li>
+<li>Add a way to control the stream application (eg. turn it on or off) from within the web application.</li>
+</ul>
+
+</body>
+</html>
