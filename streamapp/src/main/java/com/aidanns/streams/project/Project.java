@@ -42,7 +42,7 @@ public class Project {
 		
 		// Setup the spouts.
 		builder.setSpout("rule-spout", new RuleSpout(), 1);
-		builder.setSpout("cdr-spout-1", new CDRSpout("cdr_rawsample_1.txt", cdrTupleRate));
+		builder.setSpout("cdr-spout-1", new CDRSpout(projectProperties.getProperty("spout.cdr.filename"), cdrTupleRate));
 		
 		// Setup the bolts
 		builder.setBolt("statistics-gatherer", new StatisticsCalculationBolt(), 1)

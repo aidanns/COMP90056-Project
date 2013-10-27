@@ -53,3 +53,5 @@ To run the Storm application:
 #### Configuration
 
 The rate of CDR generation by the spout may be limited by setting the `spout.cdr.rate.tuples_per_second` property in `conf/project.properties`.
+
+The file to read CDRs from is specified by setting the `spout.cdr.filename` property in `conf/project.properties`. The file should by in `input/`, which is on the project classpath.
